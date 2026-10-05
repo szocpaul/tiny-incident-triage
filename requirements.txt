@@ -1,0 +1,8 @@
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.14.1+cpu
+transformers==5.18.0
+dpyr==1.12.0
+lm15==1.2.0
+polars==1.44.2
+pyarrow==25.0.1
+pytest==9.1.1
