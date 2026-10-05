@@ -1,183 +1,156 @@
-# Tasks: Ticket-triázs osztályozó
+# Tasks: Ticket triage classifier
 
 **Input**: Design documents from `/specs/001-ticket-triage/`
 
-**Prerequisites**: plan.md (jóváhagyott), spec.md (jóváhagyott), constitution.md (jóváhagyott)
+**Prerequisites**: plan.md (approved), spec.md (approved), constitution.md
+(approved)
 
-**Tests**: a spec FR-002 és FR-004 követelményei exit-code-os gate-eket írnak elő,
-ezért a teszt-taskok KÖTELEZŐK, és a playbook teszt-előbb sorrendje érvényes.
+**Tests**: spec FR-002 and FR-004 require exit-code gates, so test tasks are
+MANDATORY, in test-first order (playbook).
 
-**Organization**: US1 = tanár-címkék + kézi teszthalmaz (P1), US2 = helyi
-kategorizálás (P2), US3 = perces újrataníthatóság (P3).
+**Organization**: US1 = teacher labels + hand-checked test set (P1),
+US2 = local classification (P2), US3 = minute-scale retrainability (P3).
 
-**Állapot-jelölés**: T001–T010 elkészültek az első iterációban; a T010
-baseline-ja (12,0% ± 0,0) a minta zajos címkéit bizonyította — ez a spec
-Background-ban dokumentált negatív eredmény. A T014-től a tanár-címkés út
-következik.
+**Status note**: T001–T010 were completed in the first iteration; the T010
+baseline (12.0% ± 0.0) proved the sample's labels are noise — a documented
+negative result in the spec Background. From T014 the teacher-labeling path
+follows. (Story tags [US1]/[US2] in the old phases reflect the original
+numbering: local classification / retrainability.)
 
 ## Format: `[ID] [P?] [Story] Description`
 
 ## Phase 1: Setup (Shared Infrastructure)
 
-- [x] T001 Projektstruktúra létrehozása a plan.md szerint (`src/triage/`, `tests/`,
-  `data/tidy/`, `runs/`), projekt-venv a gépen, pinnelt `requirements.txt`
-  (torch CPU-wheel, transformers, polars, dpyr, pytest — pontos verziók, Constitution III)
-- [x] T002 [P] `.gitignore` (runs/, data/, venv) és `src/triage/__init__.py` váz
+- [x] T001 Project structure per plan.md (`src/triage/`, `tests/`,
+  `data/tidy/`, `runs/`), project venv, pinned `requirements.txt`
+  (torch CPU wheel, transformers, polars, dpyr, pytest — exact versions,
+  Constitution III)
+- [x] T002 [P] `.gitignore` (runs model dirs, data, venv) and
+  `src/triage/__init__.py` skeleton
 
 ---
 
 ## Phase 2: Foundational (Blocking Prerequisites)
 
-**⚠️ CRITICAL**: No user story work can begin until this phase is complete
+- [x] T003 Tests FIRST: `tests/unit/test_data.py` — tidy schema columns
+  (task, split, id, text, label), stratified split ratio, 0 overlap between
+  train/test, invalid label dropped. Tests had to FAIL before implementation
+  (FR-001, FR-002)
+- [x] T004 `src/triage/data.py` — tidy (dpyr: join with the category table,
+  text = summary + description) + stratified split (seed=0, recorded) +
+  overlap checker that stops the run on error. T003 turned green.
 
-- [x] T003 Tesztek ELŐSZÖR: `tests/unit/test_data.py` — a tidy-séma oszlopai
-  (task, split, id, text, label), a stratifikált split aránya (800/200), a 0
-  átfedés train/test között, az érvénytelen címke kihagyása. A teszteknek
-  FAIL-ELNIük kell implementáció előtt (FR-001, FR-002)
-- [x] T004 `src/triage/data.py` — tidy (dpyr: join a kategóriatáblával, text =
-  summary + description) + stratifikált split (seed=0, rögzítve) +
-  átfedés-ellenőrző, amely hiba esetén megállítja a futást. Kimenet:
-  `data/tidy/*.parquet` (tutorial-séma) **és** a repó recipe-sémája:
-  `data/tasks/tickets/` alá `task.json` (name/instruction/labels) +
-  `train.jsonl` / `test.jsonl` (`{"id","text","label"}` soronként), hogy a
-  repó `recipe/train.py`-ja változtatás nélkül fusson rajta. A `task.json`
-  a mi feladatunkat írja le: `name: "servicenow_ticket_triage"`,
-  `instruction: "Classify the IT support ticket by the team that should
-  handle it."`, `labels`: a minta 8 kategóriája. T003 zöldre vált.
-
-**Checkpoint**: Foundation ready — a tidy Parquet és a split létezik, ellenőrzött.
+**Checkpoint**: Foundation ready — tidy Parquet and split exist, verified.
 
 ---
 
-## Phase 3: User Story 1 - Kategóriázott ticket, helyben (Priority: P1) 🎯 MVP
+## Phase 3: Local classification (original US1, Priority: P1) 🎯 MVP
 
-**Goal**: ticketszöveg → kategória, helyben, mérhető pontossággal, exit-code-os gate-tel
+### Tests (written first, FAILED before implementation) ⚠️
 
-**Independent Test**: `python -m triage eval --min-accuracy 0.90` exit code 0 a
-fagyott teszthalmazon (SC-001, SC-002)
+- [x] T005 [P] `tests/unit/test_evaluate.py` — metrics.json format (overall +
+  per-category accuracy), non-zero exit code below threshold;
+  `tests/integration/test_smoke.py` — end-to-end tidy→train(1 epoch)→eval on
+  a 40-row slice
 
-### Tests for User Story 1 ⚠️
+### Implementation
 
-> **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
+- [x] T006 `src/triage/train.py` — Ettin-17M full fine-tune on CPU, **exactly
+  the repo's recipe** (reference: `recipe/train.py`): AdamW lr=1e-4, wd=0.01,
+  batch=32, 5% warmup + cosine decay, gradient clipping 1.0, cross-entropy,
+  maxlen=128, and **fixed step count via the epoch formula**:
+  `epochs = max(6, round(6 * 9493 / train_rows))`. Every parameter into the
+  run's `config.json` (FR-003, FR-007)
+- [x] T007 `src/triage/evaluate.py` — overall + per-category accuracy →
+  `runs/<run>/metrics.json`, `--min-accuracy` exit-code gate (FR-004)
+- [x] T008 [P] `src/triage/predict.py` — single classification + timing
+  (SC-004), empty/short text signal (spec Edge Cases)
+- [x] T009 `src/triage/__main__.py` — CLI: `tidy | train | eval | predict`
+  subcommands from one entry
+- [x] T010 **Baseline run**: tidy→train→eval **with 3 seeds (0, 1, 2)**;
+  metrics.json contains mean and stdev (the repo's "means of 3 runs" method;
+  Constitution I noise measurement). Result: `runs/baseline-*/metrics.json`
+  (FR-005, D4). **Result: 12.0% ± 0.0 — chance level; the sample's labels
+  are noise.** Kept as documented negative evidence.
 
-- [x] T005 [P] [US1] `tests/unit/test_evaluate.py` — a metrika-írás formátuma
-  (metrics.json: teljes + per-category pontosság), a küszöb alatti eredmény
-  nem-nulla exit code-ja; `tests/integration/test_smoke.py` — 40 soros
-  szeleten tidy→train(1 epoch)→eval end-to-end lefut
-
-### Implementation for User Story 1
-
-- [x] T006 [US1] `src/triage/train.py` — Ettin-17M full fine-tune CPU-n,
-  **pontosan a repó receptje** (referencia: `recipe/train.py`): AdamW lr=1e-4,
-  wd=0.01, batch=32, 5% warmup + cosine decay, gradient clipping 1.0,
-  cross-entropy, maxlen=128, és **fix lépésszám az epoch-formulával**:
-  `epochs = max(6, round(6 * 9493 / tanítósorok))` (800 sorra 71 epoch ≈
-  1775 lépés, megegyezően a repó 2000-soros 28-epochos futásával). Minden
-  paraméter a run `config.json`-jába (FR-003, FR-008)
-- [x] T007 [US1] `src/triage/evaluate.py` — teljes + kategóriánkénti pontosság
-  → `runs/<run>/metrics.json`, `--min-accuracy` exit-code gate (FR-004)
-- [x] T008 [P] [US1] `src/triage/predict.py` — egyedi osztályozás + időmérés
-  (SC-004: ≤ 100 ms/db), üres/rövid szöveg jelzése (spec Edge Cases)
-- [x] T009 [US1] `src/triage/__main__.py` — CLI: `tidy | split | train | eval
-  | predict` alparancsok egy belépésből
-- [x] T010 [US1] **Baseline run**: tidy→train→eval **3 seeddel (0, 1, 2)** a
-  800/200 spliten; a metrics.json az átlagot és a szórást is tartalmazza
-  (a repó módszertana: "tables report means of 3 runs"; Constitution I
-  zajmérés). Az eredmény `runs/baseline-*/metrics.json`-be íródik (FR-005,
-  D4) — a további változtatások csak ezután, és ehhez viszonyítva; javulást
-  csak nem-átfedő intervallumnál fogadunk el.
-
-**Checkpoint**: US1 önállóan működik; a baseline fájl létezik.
+**Checkpoint**: the pipeline works end to end; the baseline file exists and
+drove the spec amendment (teacher labeling).
 
 ---
 
-## Phase 4: User Story 2 - Perces újrataníthatóság (Priority: P2)
+## Phase 4: Minute-scale retrainability (original US2, Priority: P2)
 
-**Goal**: a teljes folyamat egy paranccsal reprodukálható, időméréssel
+- [x] T011 Reproducibility endpoint: `python -m triage run --name <name>`
+  executes the tidy→split→train→eval chain, writes config and measured times
+  into the run folder; baseline and new run metrics.json side by side in the
+  report (FR-007, SC-003)
 
-**Independent Test**: újrafuttatás eltérő run-névvel; a run-napló
-időbélyegeiből a teljes idő ≤ 15 perc (SC-003)
-
-- [x] T011 [US2] Reprodukálhatósági végpontok: `python -m triage run --name
-  <név>` végrehajtja a tidy→split→train→eval láncot, a konfigot és a
-  mért időket a run-mappába írja; a baseline és az új run metrics.json-jei
-  egymás mellé kerülnek a riportban (FR-008, SC-003)
-
-**Checkpoint**: US1 és US2 is önállóan működik.
-
----
-
-## Phase 6: Tanár-címkézés és új baseline (US1, a baseline-mérés nyomán)
-
-**Goal**: megbízható címkék az 1000 sorra LLM-tanártól; kézzel ellenőrzött
-fagyott teszthalmaz; új baseline a valós tartalom szerinti címkéken
-
-**Independent Test**: `python -m triage label` lefut, SC-005 (≥99% érvényes);
-a kézi teszthalmaz verziózott fájl; az új baseline mean_accuracy szignifikánsan
-a 12%-os zaj-baseline fölött van (nem-átfedő intervallum)
-
-- [x] T014 **[MANUÁLIS KAPU]** A felhasználó bejelentkezik a Kimi
-  Code-fiókjával az lm15 mentett bejelentkezésébe (`lm15.login`). Agent nem
-  pipálhatja — a hitelesítés a felhasználó interakciója.
-- [x] T015 [US1] Tesztek ELŐSZÖR: `tests/unit/test_label.py` — a prompt
-  tartalmazza az instrukciót és a 8 címkét; a válasz-illesztés csak pontos
-  címkét fogad el (egyéb = None); a jsonl resumable (újrafuttatásnál nem
-  címkéz újra). FAIL előbb. Majd `src/triage/label.py`: lm15 async címkézés,
-  alacsony kezdő-throttle (start=4), 60 s timeout, retry exponential
-  backoff-fal, `data/labels/teacher.jsonl` + `label_stats.json` (idő, tokenek,
-  érvénytelen száma) (FR-008)
-- [x] T016 [US1] Címkézés futtatása mind az 1000 soron a mentett
-  bejelentkezéssel; SC-005 ellenőrzés (≥99% érvényes); a futás előtt a
-  felhasználó jóváhagyása a kimenő forgalomra (FR-006 kivétel igazolva)
-- [x] T017 **[MANUÁLIS KAPU]** A felhasználó kézzel átnéz ~200 tanár-címkézett
-  sort (rétegzett minta: 25/kategória), javítja, ami rossz; az eredmény
-  `data/labels/handchecked_test.jsonl` (fagyott, verziózott). Agent nem
-  pipálhatja.
-- [x] T018 [US1] `data.py` átdolgozás: a tidy most a tanár-címkéket használja;
-  a teszthalmaz = a kézzel ellenőrzött fájl; a tanítóhalmaz = tanár-címkék
-  mínusz a kézi teszt azonosítói; 0 átfedés mindkét irányban (FR-002, FR-009).
-  A T003 tesztek frissítése az új szerződéshez (a zajos category-join kódút
-  törlődik)
-- [x] T019 [US1] **Új baseline**: 3 seed (0, 1, 2) a tanár-címkéken, eval a
-  kézi teszthalmazon; `runs/baseline-teacher/metrics.json` (átlag ± szórás).
-  Összevetés a 12%-os zaj-baseline-nal; javulás csak nem-átfedő
-  intervallumnál fogadható el (Constitution I)
-
-**Checkpoint**: valós tartalom szerinti, mért baseline létezik; az SC-001
-gate innentől a kézi teszthalmazon fut.
+**Checkpoint**: both original stories work independently.
 
 ---
 
 ## Phase 5: Polish & Cross-Cutting Concerns
 
-- [x] T012 **[MANUÁLIS KAPU]** Teljes SC-validáció: a felhasználó lefuttatja
-  `pytest -q` + `python -m triage eval --min-accuracy 0.85` (a kézi
-  teszthalmazon) + a predict időmérést, és átnézi a tanár-címkés baseline
-  metrics.json-t (SC-001…SC-005). Ezt agent NEM pipálhatja ki.
-- [x] T013 [P] `README.md` — quickstart (venv, requirements, a CLI-parancsok
-  beleértve a `label` lépést, gate-parancs), a repóban
+- [x] T012 **[MANUAL GATE]** Full SC validation by the owner: `pytest -q` +
+  eval gate + predict timing, baseline metrics.json reviewed. An agent may
+  NOT check this off. (Approved by the owner, 2026-10-05.)
+- [x] T013 [P] `README.md` — quickstart in the repo
+
+---
+
+## Phase 6: Teacher labeling and new baseline (US1, after the measurement)
+
+**Goal**: trustworthy labels for the 1,000 rows from an LLM teacher;
+hand-checked frozen test set; new baseline on content-true labels
+
+**Independent Test**: `python -m triage label` runs, SC-005 (≥99% valid); the
+hand-checked test set is a versioned file; the new baseline mean accuracy is
+significantly above the 12% noise baseline (non-overlapping interval)
+
+- [x] T014 **[MANUAL GATE]** Owner signs in to Kimi Code via lm15 saved
+  sign-in (`scripts/login_kimi.py`). Done 2026-10-05 (device flow,
+  `--kimi-ai` host).
+- [x] T015 Tests FIRST: `tests/unit/test_label.py` — the prompt contains the
+  instruction and the 8 labels; answer matching accepts only an exact label
+  (else None); the jsonl is resumable. FAILED first. Then
+  `src/triage/label.py`: lm15 async labeling, low start throttle (start=4),
+  60 s timeout, exponential-backoff retries, `data/labels/teacher.jsonl` +
+  `label_stats.json` (FR-008). Note: required a base_url fix
+  (`/coding` → `/coding/v1`) and max_tokens=512 (the endpoint's thinking
+  otherwise consumed the whole budget).
+- [x] T016 Labeling run on all 1,000 rows with the saved sign-in; SC-005
+  verified: **99.7% valid (997/1000), 421 s, $0** (FR-006 exception confirmed)
+- [x] T017 **[MANUAL GATE]** The owner hand-reviewed ~200 teacher-labeled rows
+  (stratified sample: 25/category), corrected 7 borderline rulings; result:
+  `data/labels/handchecked_test.jsonl` (frozen, versioned). Approved.
+- [x] T018 `data.py` rework: tidy now uses teacher labels; test set = the
+  hand-checked file; train = teacher labels minus hand-checked ids; 0 overlap
+  both ways (FR-002, FR-009). T003 tests updated to the new contract (the
+  noisy category-join path deleted). Real split: 797 train / 200 test.
+- [x] T019 **New baseline**: 3 seeds (0, 1, 2) on teacher labels, eval on the
+  hand-checked test; `runs/baseline-teacher/metrics.json` (mean ± stdev).
+  **Result: 93.33% ± 1.26** — non-overlapping with the 12% noise baseline.
+
+**Checkpoint**: a content-true, measured baseline exists; the SC-001 gate
+from now on runs on the hand-checked test set.
 
 ---
 
 ## Dependencies & Execution Order
 
-- **Phase 1 → 2 → 3 → 4 → 5** szigorúan sorban; a teszt-taskok (T003, T005)
-  az implementációjuk (T004, T006–T009) ELŐTT, FAIL-elve. (Elkészült; a
-  story-címkék [US1]/[US2] az eredeti számozást tükrözik: helyi
-  kategorizálás / újrataníthatóság.)
-- **Phase 6** (az új P1 story): T014 (MANUÁLIS KAPU) → T015 (teszt előbb) →
-  T016 → T017 (MANUÁLIS KAPU) → T018 → T019 → vissza a T012-re.
+- **Phase 1 → 2 → 3 → 4 → 5** strictly in order; test tasks (T003, T005)
+  BEFORE their implementation (T004, T006–T009), failing first.
+- **Phase 6** (the new P1 story): T014 (MANUAL GATE) → T015 (test first) →
+  T016 → T017 (MANUAL GATE) → T018 → T019 → back to T012.
 - T001 → T002 [P] → T003 → T004 → T005 [P] → T006 → T007 → T008 [P] → T009 →
-  T010 → T011 → [Phase 6] → T012 (MANUÁLIS KAPU) → T013 [P].
-- [P] jelölés: külön fájl, nincs függőség — T002, T005, T008, T013
-  párhuzamosítható a szomszédaikkal.
-- T012 MANUÁLIS KAPU: az implementáció akkor sem "kész", amíg a felhasználó
-  vissza nem igazolta.
+  T010 → T011 → [Phase 6] → T012 (MANUAL GATE) → T013 [P].
 
 ## Validation Checklist
 
-- [ ] Minden FR-hez (FR-001…FR-009) tartozik legalább egy task
-- [ ] Minden SC (SC-001…SC-005) gate-parancsként futtatható
-- [ ] A MANUÁLIS KAPU taskok explicit jelölve (T012, T014, T017)
-- [ ] A zaj-baseline (T010, 12%) és a tanár-baseline (T019) is fájlban őrződik
-- [ ] Kimenő adatforgalom csak a T016-ban, a felhasználó jóváhagyásával (FR-006 kivétel)
+- [x] Every FR (FR-001…FR-009) has at least one task
+- [x] Every SC (SC-001…SC-005) runnable as a gate
+- [x] MANUAL GATE tasks explicitly marked (T012, T014, T017)
+- [x] The noise baseline (T010, 12%) and the teacher baseline (T019) both
+  preserved in files
+- [x] Outbound data traffic only in T016, with the owner's approval (FR-006
+  exception)

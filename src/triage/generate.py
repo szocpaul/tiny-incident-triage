@@ -63,8 +63,10 @@ def is_english(text: str) -> bool:
 
 
 def normalize_text(text: str) -> str:
-    """Kisbetű, írásjel- és whitespace-normalizálás (deduphoz és FR-003-hoz)."""
-    t = text.lower()
+    """Kisbetű, írásjel- és whitespace-normalizálás; a „Reported by X"
+    végződés levágva (ugyanaz a hiba más bejelentőtől = ugyanaz a szöveg)."""
+    t = re.sub(r"(?i)\s*reported by .*$", "", text)
+    t = t.lower()
     t = re.sub(r"[^a-z0-9 ]+", " ", t)
     return re.sub(r"\s+", " ", t).strip()
 

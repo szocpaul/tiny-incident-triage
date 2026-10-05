@@ -1,0 +1,48 @@
+{
+  "test_file": "data/labels/handchecked_test.jsonl",
+  "n_conflicts": 2,
+  "conflicts": [
+    {
+      "key": "spam burst hit shared support inbox this morning spam burst hit shared support inbox this morning",
+      "count": 5,
+      "labels": [
+        "Email & Collaboration",
+        "Security"
+      ],
+      "ids": [
+        "servicenow_ticket_triage-432",
+        "servicenow_ticket_triage-410",
+        "servicenow_ticket_triage-232",
+        "servicenow_ticket_triage-867",
+        "servicenow_ticket_triage-693"
+      ],
+      "texts": [
+        "Spam burst hit shared support inbox this morning.. Spam burst hit shared support inbox this morning. Reported by Ronald from Warehouse.",
+        "Spam burst hit shared support inbox this morning.. Spam burst hit shared support inbox this morning. Reported by Matthew from Warehouse.",
+        "Spam burst hit shared support inbox this morning.. Spam burst hit shared support inbox this morning. Reported by Jacob from Sales.",
+        "Spam burst hit shared support inbox this morning.. Spam burst hit shared support inbox this morning. Reported by Kelly from HR.",
+        "Spam burst hit shared support inbox this morning.. Spam burst hit shared support inbox this morning. Reported by Grace from Sales."
+      ]
+    },
+    {
+      "key": "user cannot map shared drive from new laptop user cannot map shared drive from new laptop",
+      "count": 4,
+      "labels": [
+        "Laptop / Endpoint",
+        "Network & VPN"
+      ],
+      "ids": [
+        "servicenow_ticket_triage-480",
+        "servicenow_ticket_triage-39",
+        "servicenow_ticket_triage-820",
+        "servicenow_ticket_triage-703"
+      ],
+      "texts": [
+        "User cannot map shared drive from new laptop.. User cannot map shared drive from new laptop. Reported by Kathy from HR.",
+        "User cannot map shared drive from new laptop.. User cannot map shared drive from new laptop. Reported by Michelle from Warehouse.",
+        "User cannot map shared drive from new laptop.. User cannot map shared drive from new laptop. Reported by Janet from Operations.",
+        "User cannot map shared drive from new laptop.. User cannot map shared drive from new laptop. Reported by Margaret from Warehouse."
+      ]
+    }
+  ]
+}

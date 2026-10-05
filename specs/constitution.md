@@ -2,59 +2,59 @@
 
 ## Core Principles
 
-### I. Mérés-fegyelem (NON-NEGOTIABLE)
+### I. Measurement discipline (NON-NEGOTIABLE)
 
-Minden minőségi állítás méréssel indul és méréssel zárul. Baseline MINDIG a
-változtatás előtt készül, fájlba írva, per-axis bontásban. Javulást csak
-nem-átfedő intervallumoknál fogadunk el (kis mintán 2–3 ismétléssel mérjük a
-zajt). A gate-ek exit-code-os parancsok (pl. `pytest -q`, `python eval.py --min-accuracy 0.80`),
-nem szubjektív lépések. Mérésnél cache-higiénia kötelező (cache=False vagy
-ekvivalens).
+Every quality claim starts and ends with a measurement. A baseline is ALWAYS
+taken before any change, written to a file, broken down per axis. Improvement
+is only accepted on non-overlapping intervals (noise measured on small samples
+with 2–3 repetitions). Gates are exit-code commands (e.g. `pytest -q`,
+`python -m triage eval --min-accuracy 0.85`), not subjective steps. Cache
+hygiene is mandatory when measuring (cache=False or equivalent).
 
-### II. Adathigiénia (NON-NEGOTIABLE)
+### II. Data hygiene (NON-NEGOTIABLE)
 
-A tanító- és teszthalmaz sosem keveredik; a split seedje rögzített és a
-specben dokumentált. A teszthalmazhoz a tanítás alatt semmi nem nyúl — a
-kiértékelés mindig ugyanazon a fagyott teszthalmazon fut. Érvénytelen vagy
-hiányzó címke: kihagyjuk a tanításból, sosem találgatjuk.
+Train and test sets never mix; the split seed is fixed and documented in the
+spec. Nothing touches the test set during training — evaluation always runs on
+the same frozen test set. Invalid or missing labels: dropped from training,
+never guessed.
 
-### III. Verzió-pinnelés
+### III. Version pinning
 
-Modell, tokenizer, könyvtár és adat-verziók mindig pontosan pinnelve (nem
-lebegő alias, nem `latest`). Verzióváltás = baseline újramérés.
+Model, tokenizer, library and data versions are always pinned exactly (no
+floating aliases, no `latest`). A version change = baseline re-measured.
 
-### IV. Adatvédelem
+### IV. Data privacy
 
-A ticketszöveg alapértelmezetten nem hagyja el a gépet. Tanár-címkézés csak a
-felhasználó által jóváhagyott fiókon/szolgáltatón keresztül történhet, és a
-spec rögzíti, melyik adathalmaz mehetett ki, melyik nem.
+Ticket text does not leave the machine by default. Teacher labeling may only
+happen through an account/provider explicitly approved by the owner, and the
+spec records which dataset was allowed out and which was not.
 
-### V. Egyszerűség (YAGNI)
+### V. Simplicity (YAGNI)
 
-A legkisebb megoldás, ami átmegy a gate-eken. Nincs spekulatív absztrakció;
-amit a spec nem ír elő, azt nem építjük meg.
+The smallest solution that passes the gates. No speculative abstraction; what
+the spec does not require does not get built.
 
-## Fejlesztési környezet
+## Development environment
 
-Az implementáció helyben történik, a felhasználó Windows 11-es PC-jén (Ryzen 5
-7600X, 32 GB RAM, Radeon RX 7900 XT — NVIDIA/CUDA nincs). A tanítás CPU-n fut;
-a plan.md-ben minden hardver-feltételezés ehhez igazodik. Szerveroldali Prime
-Agent-átadás ebben a projektben NINCS — ha a későbbiekben mégis szükség lenne
-rá, az a constitution módosításával történik.
+Implementation happens locally, on the owner's Windows 11 PC (Ryzen 5 7600X,
+32 GB RAM, Radeon RX 7900 XT — no NVIDIA/CUDA). Training runs on CPU; every
+hardware assumption in plan.md files follows from this. There is NO
+server-side Prime Agent handoff in this project — if that ever becomes
+necessary, it happens via a constitution amendment.
 
-## Review-folyamat
+## Review process
 
-- A spec.md, plan.md és tasks.md mindegyike emberi jóváhagyási kapun megy át;
-  egyik sem tekinthető jóváhagyottnak a felhasználó explicit döntése nélkül.
-- A MANUÁLIS KAPU-ként jelölt taskokat agent nem pipálhatja ki — azokat a
-  felhasználó hajtja végre és igazolja vissza.
-- A constitution minden más gyakorlat felett áll; módosítása dokumentált,
-  a felhasználó által jóváhagyott lépés.
+- spec.md, plan.md and tasks.md each pass through a human approval gate;
+  none of them counts as approved without the owner's explicit decision.
+- Tasks marked MANUAL GATE must not be checked off by an agent — the owner
+  performs and confirms them.
+- The constitution supersedes all other practices; amending it is a
+  documented, owner-approved step.
 
 ## Governance
 
-Minden spec és plan írásakor a Constitution Check kapu kötelező: a terv
-sértése esetén javítás vagy explicit, indokolt kivétel a plan.md Complexity
-Tracking szekciójában.
+The Constitution Check gate is mandatory when writing every spec and plan: a
+violation must be fixed, or explicitly justified in the plan.md Complexity
+Tracking section.
 
 **Version**: 1.0.0 | **Ratified**: 2026-10-05 | **Last Amended**: 2026-10-05

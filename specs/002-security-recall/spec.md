@@ -1,158 +1,163 @@
-# Feature Specification: Gyenge kategóriák erősítése (minden kategória ≥90%)
+# Feature Specification: Strengthening the weak categories
 
 **Feature Branch**: `002-security-recall`
 
 **Created**: 2026-10-05
 
-**Status**: Draft
+**Status**: Approved (implemented; measured result in runs/002-boost)
 
-**Input**: User description: "A rendszer gyenge kategóriáinak felismerése a leggyengébb láncszem: a Security-ticketek kb. negyede (76,9%), a Printers & Devices kb. hetede (86,2%), a Laptop/Endpoint kb. nyolcada (87–91%) rossz csapathoz kerül; az összpontosság 92%. A cél: a gyenge kategóriák ≥90%-ra erősödjenek, az összpontosság ≥95% legyen — anélkül, hogy a már jó (96–100%) kategóriák romlanának."
+**Input**: User description: "The system's weak categories are the weakest link: about a quarter of Security tickets (76.9%), about a seventh of Printers & Devices (86.2%) and about an eighth of Laptop/Endpoint (87–91%) tickets land with the wrong team; overall accuracy is 92%. Goal: the weak categories strengthen to ≥90%, overall accuracy ≥95% — without the already-good (96–100%) categories degrading."
 
-## Background (diagnózis)
+## Background (diagnosis)
 
-A 001-es feature tanár-címkés baseline-ja (`runs/baseline-teacher/metrics.json`,
-3 seed, kézzel ellenőrzött 200 soros teszten):
+From feature 001's teacher-labeled baseline (`runs/baseline-teacher/metrics.json`,
+3 seeds, hand-checked 200-row test):
 
-- **Security: 79,5% átlag / 76,9% min** (n=26) — a leggyengébb kategória.
-- **Printers & Devices: 86,2% átlag** (n=29) — a második gyenge láncszem.
-- **Laptop / Endpoint: 91,3% átlag / 87,0% min** (n=23) — a harmadik gyenge.
-- A többi öt kategória 96–100% között áll; az összpontosság 93,3% (3 seedes
-  átlag; egyedi futáson 92,0%).
-- A tanítóhalmaz-eloszlás: Security mindössze **47 sor** (5,9%), Printers &
-  Devices 121 sor, Laptop / Endpoint 98 sor; a leggyakoribb kategória 185 sor.
-- Ellenvetés: a Telephony 100%-ot ér el 10 tanítósorral is — tehát a kevés
-  példa önmagában nem végzetes. A Security valószínűleg **a határesetekben**
-  ütközik (MFA, jelszó, SSO → Access Management felé); a Printers & Devices és
-  a Laptop/Endpoint az Endpoint–periféria határon. Az alulreprezentáltság és
-  a szemantikai határ együtt játszik.
-- A mérési keret adott: fagyott kézi teszthalmaz, 3-seedes futamok,
-  nem-átfedő intervallum-szabály (Constitution I).
+- **Security: 79.5% mean / 76.9% min** (n=26) — the weakest category.
+- **Printers & Devices: 86.2% mean** (n=29) — the second weak link.
+- **Laptop / Endpoint: 91.3% mean / 87.0% min** (n=23) — the third.
+- The other five categories stand at 96–100%; overall accuracy 93.3%
+  (3-seed mean; 92.0% on a single run).
+- Train-set distribution: Security only **47 rows** (5.9%), Printers &
+  Devices 121 rows, Laptop / Endpoint 98 rows; the most frequent category has
+  185 rows.
+- Counterpoint: Telephony reaches 100% with just 10 train rows — so few
+  examples alone are not fatal. Security presumably struggles at the
+  **borderline cases** (MFA, password, SSO → toward Access Management);
+  Printers & Devices and Laptop/Endpoint at the Endpoint–peripheral border.
+  Underrepresentation and the semantic boundary act together.
+- The measurement framework is given: frozen hand-checked test set, 3-seed
+  runs, non-overlapping-interval rule (Constitution I).
 
-Ez diagnózis; a megoldási irány (új példák gyártása és címkézése) a plan.md-ben
-landol. A küszöb-kalibrációs (ReAnchor-szerű) megoldást a felhasználó
-explicit kizárta: a cél a modell javítása, nem a döntési küszöb igazítása.
+This is the diagnosis; the solution direction (producing and labeling new
+examples) lands in plan.md. Threshold-calibration (ReAnchor-style) solutions
+were explicitly excluded by the owner: the goal is improving the model, not
+adjusting the decision threshold.
 
 ## User Scenarios & Testing *(mandatory)*
 
-### User Story 1 - A gyenge kategóriák felzárkózása (Priority: P1)
+### User Story 1 - Weak categories catch up (Priority: P1)
 
-A felhasználó azt akarja, hogy a rendszer minden kategóriában megbízhatóan
-osztályozzon: a gyenge hármas (Security, Printers & Devices, Laptop/Endpoint)
-≥90% fölé kerüljön, az összpontosság ≥95% legyen — a fagyott teszthalmazon,
-számszerűen igazolva.
+The owner wants the system to classify reliably in every category: the weak
+trio (Security, Printers & Devices, Laptop/Endpoint) rises above ≥90%,
+overall accuracy reaches ≥95% — on the frozen test set, with numeric proof.
 
-**Why this priority**: Ez az egyetlen érték, amiért a feature létezik; minden
-más (folyamat, eszköz) ennek az eszköze.
+**Why this priority**: This is the only value the feature exists for;
+everything else (process, tooling) is instrumental to it.
 
-**Independent Test**: A megerősített modell minden kategóriájának pontossága a
-fagyott, kézzel ellenőrzött teszthalmazon mérhető egyetlen gate-paranccsal, és
-a baseline metrics.json-nal összevethető.
+**Independent Test**: The strengthened model's accuracy in every category is
+measurable on the frozen, hand-checked test set with a single gate command,
+and comparable to the baseline metrics.json.
 
 **Acceptance Scenarios**:
 
-1. **Given** a megerősített modell, **When** lefut az eval-gate a fagyott
-   teszthalmazon, **Then** minden kategória pontossága eléri a
-   specifikált küszöböt (SC-001).
-2. **Given** ugyanaz a mérés, **When** a többi kategóriát vizsgáljuk, **Then**
-   egyik sem romlik szignifikánsan a baseline-hoz képest (SC-002).
+1. **Given** the strengthened model, **When** the eval gate runs on the
+   frozen test set, **Then** every category's accuracy reaches the specified
+   threshold (SC-001).
+2. **Given** the same measurement, **When** the other categories are examined,
+   **Then** none degrades significantly versus baseline (SC-003).
 
 ---
 
-### User Story 2 - Új gyenge-kategóriás példák ellenőrzött gyártása (Priority: P2)
+### User Story 2 - Verified generation of new weak-category examples (Priority: P2)
 
-A felhasználó további, Security-, Printers & Devices- és Laptop/Endpoint-témájú
-ticket-példákat akar a tanítóhalmazba, megbízható címkékkel — és a gyártott
-példákat egy rétegen át kézzel áttekinteni, mielőtt azok tanítóadattá válnak.
+The owner wants additional Security-, Printers & Devices- and
+Laptop/Endpoint-themed ticket examples in the training set, with trustworthy
+labels — and to hand-review a sample of the generated examples before they
+become training data.
 
-**Why this priority**: A diagnózis szerint az alulreprezentáltság a fő gyanúsított;
-de a kézi review nélkül a gyártott adat ugyanolyan bizalom-problémát hozna,
-mint amit a 001-ben a zajos mintánál láttunk.
+**Why this priority**: The diagnosis points to underrepresentation as the
+prime suspect; but without hand review, generated data would carry the same
+trust problem we saw with the noisy sample in 001.
 
-**Independent Test**: az új példák külön fájlban állnak, a mintájuk
-kézzel átnézve, és a tanítóhalmazba csak a jóváhagyás után kerülnek.
+**Independent Test**: the new examples live in a separate file, a sample is
+hand-reviewed, and they enter the training set only after approval.
 
 **Acceptance Scenarios**:
 
-1. **Given** az új gyártott példák, **When** a felhasználó átnézi a mintájukat,
-   **Then** a rossznak ítélt sorok nem kerülnek a tanítóhalmazba.
-2. **Given** a bővített tanítóhalmaz, **When** a split-ellenőrző fut, **Then**
-   továbbra is 0 átfedés áll a kézi teszthalmazzal (FR-009 öröklődik).
+1. **Given** the new generated examples, **When** the owner reviews the
+   sample, **Then** rows judged wrong do not enter the training set.
+2. **Given** the extended training set, **When** the split checker runs,
+   **Then** there is still 0 overlap with the hand-checked test set (FR-009
+   inherited).
 
 ---
 
 ### Edge Cases
 
-- A gyártott példák túl sablonosak (a tanár kliséit másolják): a kézi review
-  szűri; a mérés a fagyott (nem gyártott) teszthalmazon történik, így a
-  sablonosság nem hazudtolhatja meg az eredményt.
-- A gyártott példák véletlenül átfednek egy tesztsorral: az átfedés-ellenőrző
-  szövegazonosságot is vizsgál (nem csak id-t), hiba esetén a futás megáll.
-- A bővítés más kategóriákat ront (pl. Access Management felé nő a zavár):
-  az SC-002 gate pont ezt fogja meg.
-- Az új példák a meglévő 8 kategórián kívüli témát hoznának: nem kerülnek be;
-  a kategóriarendszer ebben a feature-ben fagyott.
+- Generated examples too templated (copying the teacher's clichés): the hand
+  review filters them; measurement happens on the frozen (not generated) test
+  set, so templatedness cannot falsify the result.
+- Generated examples accidentally overlap a test row: the overlap checker
+  also tests text identity (not just id); on error the run stops.
+- The extension degrades other categories (e.g. confusion grows toward Access
+  Management): the SC-003 gate catches exactly that.
+- New examples would introduce a topic outside the existing 8 categories:
+  not admitted; the category system is frozen in this feature.
 
 ## Requirements *(mandatory)*
 
 ### Functional Requirements
 
-- **FR-001**: Az új tanítópéldák azonos sémában készüljenek, mint a meglévő
-  tanítóhalmaz (azonosító, szöveg, címke), és külön fájlban, verziózva álljanak.
-- **FR-002**: Az új példák címkéje konstrukció szerint legyen konzisztens
-  (a példa a címkéhez tartozó témából készül), és a tanítás előtt a
-  felhasználó mintát átnéz (MANUÁLIS KAPU).
-- **FR-003**: A bővített tanítóhalmaz és a fagyott teszthalmaz között 0
-  átfedés — azonosítóra ÉS normalizált szövegre is ellenőrizve.
-- **FR-004**: A tanítás a 001-ben rögzített, változatlan recepttel fusson
-  (ugyanaz a modell, hiperparaméterek, epoch-formula); csak az adat változik.
-- **FR-005**: A mérés a fagyott, kézzel ellenőrzött 200 soros teszthalmazon,
-  3 seeddel (0, 1, 2) fusson, és a riport a `baseline-teacher` eredményéhez
-  viszonyítson (átlag, szórás, kategóriánkénti bontás).
-- **FR-006**: A javulás csak nem-átfedő intervallumokkal fogadható el
-  (Constitution I) — a „valamivel jobb" nem eredmény.
+- **FR-001**: New training examples are produced in the same schema as the
+  existing training set (id, text, label), and live in a separate, versioned
+  file.
+- **FR-002**: New examples' labels are consistent by construction (the example
+  is written for the label's topic), and the owner reviews a sample before
+  training (MANUAL GATE).
+- **FR-003**: 0 overlap between the extended training set and the frozen test
+  set — checked by id AND normalized text.
+- **FR-004**: Training runs with the unchanged recipe recorded in 001 (same
+  model, hyperparameters, epoch formula); only the data changes.
+- **FR-005**: Measurement runs on the frozen, hand-checked 200-row test set
+  with 3 seeds (0, 1, 2), and the report compares against `baseline-teacher`
+  (mean, stdev, per-category breakdown).
+- **FR-006**: Improvement is accepted only with non-overlapping intervals
+  (Constitution I) — "somewhat better" is not a result.
 
 ### Key Entities
 
-- **Gyártott példa**: LLM által írt, gyenge-kategóriás ticketszöveg; konstrukció
-  szerinti címkével; verziózott fájlban.
-- **Bővített tanítóhalmaz**: a 001-es tanítóhalmaz + a jóváhagyott gyártott
-  példák.
-- **Fagyott teszthalmaz**: változatlan (a 001-beli 200 sor); az összehasonlítás
-  alapja.
+- **Generated example**: an LLM-written, weak-category ticket text; with a
+  by-construction label; in a versioned file.
+- **Extended training set**: the 001 training set + the approved generated
+  examples.
+- **Frozen test set**: unchanged (the 200 rows from 001); the basis of
+  comparison.
 
 ## Success Criteria *(mandatory)*
 
 ### Measurable Outcomes
 
-- **SC-001 (kategória-szint)**: a három gyenge kategória (Security, Printers &
-  Devices, Laptop / Endpoint) 3-seedes átlaga ≥ 90% a fagyott teszthalmazon
-  (baseline: 79,5% / 86,2% / 91,3%), ÉS mindegyikben minden seed ≥ 85% —
-  nem-átfedő intervallummal igazolva. A riport a 95%-os stretch-célt is
-  jelzi (nem gate).
-- **SC-002 (összkép)**: az összpontosság 3-seedes átlaga ≥ 95% (baseline:
-  93,3%), nem-átfedő intervallummal.
-- **SC-003 (védelem)**: a jelenleg ≥96%-os kategóriák 3-seedes átlaga ≥ a
-  baseline átlaga mínusz 2 százalékpont.
-- **SC-004**: A tanítás+értékelés ≤ 15 perc/seed a helyi gépen (örökölt
-  korlát), és a recept változatlan (FR-004 ellenőrzött).
-- **SC-005**: A gyártott példákból a felhasználó által átnézett minta
-  ≥ 90%-a találja a felhasználó helyesnek; a kiszórt arány naplózódik.
+- **SC-001 (category level)**: the three weak categories (Security, Printers &
+  Devices, Laptop / Endpoint) 3-seed mean ≥ 90% on the frozen test set
+  (baseline: 79.5% / 86.2% / 91.3%), AND in each of them every seed ≥ 85% —
+  proven with non-overlapping intervals. The report also marks the 95%
+  stretch goal (not a gate).
+- **SC-002 (big picture)**: overall accuracy 3-seed mean ≥ 95% (baseline:
+  93.3%), with non-overlapping intervals.
+- **SC-003 (protection)**: categories currently ≥96% keep a 3-seed mean ≥
+  their baseline mean minus 2 percentage points.
+- **SC-004**: training+evaluation ≤ 15 min/seed on the local machine
+  (inherited constraint), and the recipe is unchanged (FR-004 verified).
+- **SC-005**: of the generated examples, the owner finds ≥90% of the reviewed
+  sample correct; the rejected rate is logged.
 
 ## Assumptions
 
-- A 001-es fagyott teszthalmaz változatlan marad — az összehasonlíthatóság
-  feláldozása nagyobb kár lenne, mint a teszthalmaz bővítésének haszna.
-- A tanár-fiók (Kimi Code) továbbra is használható egyszeri, jóváhagyott
-  adatgyártásra (a 001-beli FR-006 kivétel kiterjed a gyártásra is).
-- A gyenge kategóriák határesetei a bővítés fókuszában állnak: Security
-  (MFA/jelszó/SSO ↔ Access Management), Printers & Devices és Laptop/Endpoint
-  (periféria ↔ Endpoint határ).
+- The 001 frozen test set remains unchanged — sacrificing comparability would
+  be a greater loss than the benefit of extending the test set.
+- The teacher account (Kimi Code) remains usable for one-off, approved data
+  generation (the 001 FR-006 exception extends to generation).
+- The weak categories' borderline cases are the focus of the extension:
+  Security (MFA/password/SSO ↔ Access Management), Printers & Devices and
+  Laptop/Endpoint (peripheral ↔ Endpoint border).
 
 ## Out of Scope
 
-- Döntési küszöb kalibrálása, DSPy/ReAnchor-adapter (a felhasználó kizárta).
-  *Újraindítási feltétel: külön spec, ha a modell-javítás kimerült.*
-- A jelenleg ≥96%-os kategóriák további csiszolása. *Újraindítási feltétel:
-  ha az SC-001 és SC-002 teljesül, és a felhasználó magasabb sávot tűz ki.*
-- Új kategória bevezetése. *Újraindítási feltétel: külön spec, mert az a
-  fagyott teszthalmazt is érintené.*
+- Decision-threshold calibration, DSPy/ReAnchor adapter (excluded by the
+  owner). *Restart condition: separate spec, if model improvement is
+  exhausted.*
+- Further polishing of categories currently ≥96%. *Restart condition: SC-001
+  and SC-002 pass, and the owner sets a higher bar.*
+- Introducing a new category. *Restart condition: separate spec, as it would
+  affect the frozen test set too.*

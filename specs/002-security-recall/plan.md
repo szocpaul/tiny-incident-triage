@@ -1,4 +1,4 @@
-# Implementation Plan: Gyenge kategóriák erősítése
+# Implementation Plan: Strengthening the weak categories
 
 **Branch**: `002-security-recall` | **Date**: 2026-10-05 | **Spec**: [spec.md](spec.md)
 
@@ -6,133 +6,141 @@
 
 ## Summary
 
-A gyenge kategóriákhoz (Security, Printers & Devices, Laptop / Endpoint) a
-tanárral célzott, altémázott szintetikus ticketeket gyártunk (~200 új sor),
-a felhasználó mintát kézzel átnézi (MANUÁLIS KAPU), a bővített tanítóhalmazon
-a **változatlan recepttel** újratanítunk (3 seed), és a fagyott kézi
-teszthalmazon mérünk — a 001-es baseline-hoz viszonyítva, nem-átfedő
-intervallum-szabállyal.
+For the weak categories (Security, Printers & Devices, Laptop / Endpoint) we
+generate targeted, subtopic-seeded synthetic tickets with the teacher (~200
+new rows), the owner hand-reviews a sample (MANUAL GATE), we retrain on the
+extended training set with the **unchanged recipe** (3 seeds), and measure on
+the frozen hand-checked test set — against the 001 baseline, with the
+non-overlapping-interval rule.
 
 ## Technical Context
 
-A 001-es stack változatlan (Python 3.12, torch CPU, transformers, dpyr/polars,
-lm15, mind pinnelve). Új elem: egy generáló lépés ugyanazzal a mentett
-Kimi Code-bejelentkezéssel (a spec FR-006-kivétele kiterjed a gyártásra).
+The 001 stack is unchanged (Python 3.12, CPU torch, transformers,
+dpyr/polars, lm15, all pinned). New element: a generation step with the same
+saved Kimi Code sign-in (the spec's FR-006 exception extends to generation).
 
-**Új modul**: `src/triage/generate.py` — altémázott, seeded szintetikus
-ticketgyártás + dedup + teszt-átfedés-ellenőrző.
+**New module**: `src/triage/generate.py` — subtopic-seeded, seeded synthetic
+ticket generation + dedup + test-overlap checker.
 
 ## Key Decisions
 
-### D1: Gyártás altémára bontva, „konstrukció szerinti címke"
+### D1: Generation broken down by subtopic, "by-construction label"
 
-**Döntés**: nem szabad szöveget kérünk, hanem **(kategória, altéma) párokon**
-iterálunk: minden generált sor eleve a célzott kategóriához készül, tehát a
-címke konstrukció szerint helyes; a tanártól csak a szöveg jön.
+**Decision**: we don't ask for free text; we iterate over **(category,
+subtopic) pairs**: every generated row is written for the target category in
+the first place, so the label is correct by construction; only the text comes
+from the teacher.
 
-Altémák (a baseline-diagnózis határvonalai mentén):
+Subtopics (along the baseline diagnosis' borderlines):
 
-- **Security** (~100 sor): gyanús belépés/impossible travel, phishing-gyanú,
-  BitLocker/recovery key, vírusirtó-riasztás, jogosulatlan eszköz,
-  **határeset**: MFA/jelszó/SSO-incidensek biztonsági szögből
-  (pl. „MFA fatigue attack gyanúja").
-- **Printers & Devices** (~60 sor): nyomtató offline/jam, scanner,
-  címkenyomtató, **határeset**: docking/periféria, amely nem a laptop hibája.
-- **Laptop / Endpoint** (~40 sor): webcam, lassulás, tárhely, képernyő,
-  **határeset**: dokkoló és beépített periféria az eszköz hibájaként.
+- **Security** (~100 rows): impossible travel / suspicious sign-in, phishing
+  report, BitLocker recovery key, antivirus/EDR alert, unauthorized USB,
+  **borderline**: MFA-failure incidents from a security angle (e.g. suspected
+  MFA fatigue attack).
+- **Printers & Devices** (~60 rows): printer offline/jam, scanner, label
+  printer, **borderline**: docking/peripheral faults that are not the laptop's.
+- **Laptop / Endpoint** (~40 rows): webcam, slowdown, storage, screen,
+  **borderline**: docking and built-in peripherals as the device's fault.
 
-**Indoklás**: a 001 tanulsága, hogy a címke-zaj a legnagyobb kockázat; ha a
-címke a generálás inputja (nem outputja), a zajforrás kikapcsolódik. A kézi
-review (SC-005) a maradék minőségi kockázatot fogja.
+**Rationale**: the 001 lesson is that label noise is the biggest risk; when
+the label is the input of generation (not its output), the noise source is
+switched off. The hand review (SC-005) catches the remaining quality risk.
 
-**Elvetett alternatíva**: szabadon generált ticketek utólagos tanár-címkézése
-— felesleges kör, és visszahozná a címkehibát.
+**Rejected alternative**: freely generated tickets with post-hoc teacher
+labeling — a redundant round that would reintroduce label error.
 
-### D2: Változatosság szisztematikusan
+### D2: Diversity systematically
 
-**Döntés**: altéma × osztály (Finance, HR, Sales, Operations, Warehouse…) ×
-hangnem rövidített seed-lista; minden kérés N különböző ticketet ad vissza
-JSON-tömbben; utólagos dedup (pontos + normalizált szöveg) és
-**teszt-átfedés-ellenőrző** (FR-003).
+**Decision**: subtopic × department × tone seed lists; each request returns N
+distinct tickets as a JSON array; afterwards dedup (exact + normalized text)
+and a **test-overlap checker** (FR-003).
 
-**Indoklás**: 200 sablonmásolat értéktelen; a kézi teszttel való szöveges
-átfedés pedig a mérést hazudítaná meg.
+Note from implementation: v1 used Hungarian subtopic descriptions and the
+model answered in Hungarian for 319/460 rows — a documented data error. v2
+uses English subtopics, an explicit "ENGLISH ONLY" constraint, and a language
+filter (unit-tested).
 
-**Elvetett alternatíva**: egyszerű „írj 100 security ticketet" prompt —
-kliséhalmazt adna.
+**Rationale**: 200 template copies are worthless; text-level overlap with the
+hand-checked test would falsify the measurement.
 
-### D3: A recept szent (FR-004)
+**Rejected alternative**: a single "write 100 security tickets" prompt —
+yields a cliché pile.
 
-**Döntés**: modell, hiperparaméterek, epoch-formula, seed-ek (0/1/2) mind
-változatlanok; kizárólag a tanítóhalmaz bővül. Az új futamok
-`runs/002-boost-s{0,1,2}` alá kerülnek, a riport a `baseline-teacher`-hez
-viszonyít.
+### D3: The recipe is sacred (FR-004)
 
-**Indoklás**: így a javulás egyetlen okra (az adatra) vezethető vissza.
+**Decision**: model, hyperparameters, epoch formula, seeds (0/1/2) all
+unchanged; only the training set grows. The new runs go to
+`runs/002-boost-s{0,1,2}`, and the report compares against `baseline-teacher`.
 
-**Elvetett alternatíva**: epoch/hiperparaméter-finomítás ugyanabban a körben
-— keverednék az okok; ha az adatbővítés nem elég, az külön, mérhető lépés.
+**Rationale**: only then is the improvement attributable to a single cause
+(the data).
 
-### D4: A fagyott teszthalmaz változatlan
+**Rejected alternative**: epoch/hyperparameter tuning in the same round —
+causes would confound; if data extension isn't enough, that's a separate,
+measurable step.
 
-**Döntés**: a 200 soros kézi teszt marad; az új példák csak a tanítóhalmazba
-mennek. A teszt-átfedés-ellenőrző szövegazonosságot is vizsgál.
+### D4: The frozen test set is unchanged
 
-**Indoklás**: összehasonlíthatóság (spec Assumptions); a mérés érvényessége
-fontosabb, mint a teszthalmaz bővítése.
+**Decision**: the 200-row hand-checked test stays; new examples go only to
+the training set. The test-overlap checker also checks text identity.
 
-## Architektúra (ASCII)
+**Rationale**: comparability (spec Assumptions); the measurement's validity
+matters more than extending the test set.
+
+## Architecture (ASCII)
 
 ```text
-altéma-lista (D1) × osztály/hangnem seedek
+subtopic list (D1) × department/tone seeds
         |
         v
-[generate] Kimi Code (lm15), JSON-tömb válaszok   data/labels/generated_v1.jsonl
+[generate] Kimi Code (lm15), JSON-array answers   data/labels/generated_v2.jsonl
         |                                          + generate_stats.json
-        v
-[dedup]  pontos + normalizált szöveg-dedup,
-         teszt-átfedés-ellenőrző (hiba = megáll)  (FR-003)
+        |                                          (v1: Hungarian-language bug,
+        v                                           documented and discarded)
+[dedup]  exact + normalized text dedup,
+         language filter, test-overlap check (FR-003)
         |
         v
-[review] felhasználó átnéz ~50 sort (MANUÁLIS KAPU, SC-005)
+[review] owner reviews ~50 rows (MANUAL GATE, SC-005)
         |
         v
-[train]  001-es tanítóhalmaz + jóváhagyott példák
-         változatlan recept, seed 0/1/2            runs/002-boost-s*/
+[train]  001 training set + approved examples
+         unchanged recipe, seeds 0/1/2             runs/002-boost-s*/
         |
         v
-[eval]   fagyott kézi teszt (200 sor)             runs/002-boost/metrics.json
-         riport: baseline-teacher vs 002-boost
-         (átlag ± szórás, nem-átfedő intervallum, SC-001…SC-005 gate-ek)
+[eval]   frozen hand-checked test (200 rows)       runs/002-boost/metrics.json
+         report: baseline-teacher vs 002-boost
+         (mean ± stdev, non-overlapping interval, SC-001…SC-005 gates)
 ```
 
 ## Constitution Check
 
-| Elv | Ellenőrzés | Eredmény |
+| Principle | Check | Result |
 |-----|-----------|----------|
-| I. Mérés-fegyelem | baseline-teacher létezik; 3 seed; nem-átfedő intervallum (SC-001/002); gate exit-code-os | PASS |
-| II. Adathigiénia | fagyott teszt változatlan (D4); 0 átfedés id+szöveg szerint (FR-003); konstrukció szerinti címke (D1) | PASS |
-| III. Verzió-pinnelés | stack és modell változatlan | PASS |
-| IV. Adatvédelem | kimenő forgalom = a jóváhagyott Kimi Code-fiók, most generálásra (spec FR-006 kivétel kiterjesztve) | PASS |
-| V. Egyszerűség | recept szent (D3); nincs kalibráció/DSPy (spec Out of Scope) | PASS |
+| I. Measurement discipline | baseline-teacher exists; 3 seeds; non-overlapping interval (SC-001/002); gate is exit-code | PASS |
+| II. Data hygiene | frozen test unchanged (D4); 0 overlap by id+text (FR-003); by-construction label (D1) | PASS |
+| III. Version pinning | stack and model unchanged | PASS |
+| IV. Data privacy | outbound traffic = the owner's approved Kimi Code account, this time for generation (spec FR-006 exception extended) | PASS |
+| V. Simplicity | recipe sacred (D3); no calibration/DSPy (spec Out of Scope) | PASS |
 
 ## Project Structure
 
-Új/módosuló fájlok a 001-es struktúrán belül:
+New/changed files within the 001 structure:
 
 ```text
 src/triage/
-├── generate.py          # ÚJ: altémázott gyártás + dedup + átfedés-ellenőrző
-└── data.py              # bővített tanítóhalmaz összeállítása (generated merge)
+├── generate.py          # NEW: subtopic-seeded generation + dedup + overlap check
+└── data.py              # extended training set assembly (generated merge)
 
 tests/
-└── unit/test_generate.py   # ÚJ: dedup, átfedés-ellenőrző, séma-tesztek
+└── unit/test_generate.py   # NEW: dedup, overlap checker, schema, language filter
 
 data/labels/
-├── generated_v1.jsonl      # ÚJ: gyártott példák (verziózott)
-└── review_generated.csv    # ÚJ: kézi review-sablon a gyártott mintára
+├── generated_v1.jsonl      # documented failure (Hungarian output), kept
+├── generated_v2.jsonl      # generated examples (versioned, English)
+└── review_generated.csv    # hand-review template for the generated sample
 ```
 
 ## Complexity Tracking
 
-Nincs constitution-sértés — a táblázat üres.
+No constitution violation — the table is empty.

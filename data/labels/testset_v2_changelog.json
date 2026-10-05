@@ -1,0 +1,25 @@
+[
+  {
+    "group": "0",
+    "decision": "Security",
+    "kept": "servicenow_ticket_triage-432",
+    "dropped": [
+      "servicenow_ticket_triage-410",
+      "servicenow_ticket_triage-232",
+      "servicenow_ticket_triage-867",
+      "servicenow_ticket_triage-693"
+    ],
+    "reason": "The Spam mails are security responsibility"
+  },
+  {
+    "group": "1",
+    "decision": "Laptop / Endpoint",
+    "kept": "servicenow_ticket_triage-480",
+    "dropped": [
+      "servicenow_ticket_triage-39",
+      "servicenow_ticket_triage-820",
+      "servicenow_ticket_triage-703"
+    ],
+    "reason": "Because the laptop word in the context"
+  }
+]

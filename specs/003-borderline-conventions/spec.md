@@ -1,141 +1,148 @@
-# Feature Specification: Határeset-konvenciók javítása a tanítóhalmazban
+# Feature Specification: Fixing borderline conventions in the training set
 
 **Feature Branch**: `003-borderline-conventions`
 
 **Created**: 2026-10-05
 
-**Status**: Draft
+**Status**: Approved (implemented; measured result in runs/003-relabel-v4)
 
-**Input**: User description: "A tanítóadat és a felhasználói szabályok között konvenció-konfliktus van a határeseteken: a tanár az MFA/jelszó/SSO-ügyeket tömegével az Access Managementhez sorolta, a felhasználó konvenciója szerint azonban ezek (egy része) a Securityhoz tartoznak; hasonlóan elmosódott a periféria↔endpoint határ. A modell így nem a háziszabályt tanulja. Szeretnénk, hogy a tanítóhalmaz határesetei a felhasználó konvencióját kövessék, és a javulás a fagyott teszthalmazon mérhető legyen."
+**Input**: User description: "There is a convention conflict between the training data and the owner's rules at the borderline cases: the teacher labeled MFA/password/SSO issues as Access Management en masse, while per the owner's convention some of these belong to Security; the peripheral↔endpoint border is similarly blurred. The model therefore does not learn the house rules. We want the training set's borderline cases to follow the owner's convention, with the improvement measurable on the frozen test set."
 
-## Background (diagnózis)
+## Background (diagnosis)
 
-A 002-es mérés (`runs/002-boost/metrics.json`, 3 seed, fagyott teszt):
+From the 002 measurement (`runs/002-boost/metrics.json`, 3 seeds, frozen test):
 
-- Laptop / Endpoint: 91,3% → **97,1%** (a bővítés működött),
-- Printers & Devices: 86,2% → 86,2% (mozdulatlan),
-- **Security: 79,5% → 78,2%** (nem javult), összpontosság 94,0% (SC bukott).
-- Diagnózis: a Security nem darabszám-, hanem **konvenció-probléma**. A
-  felhasználó a T017-es review-ban az „MFA push nem érkezik" típusú sorokat
-  Securitynak ítélte, míg a tanár a tanítóhalmazban ezeket Access
-  Managementnek címkézte (158 soros erős konvenció). A 100 gyártott
-  Security-sor nem tudta felülírni.
-- Nyitott kérdés: a Printers & Devices mozdulatlanságának oka ismeretlen —
-  az első lépés a **konfúziós mérés** (melyik kategóriával keveri), mert a
-  javítás csak célzottan, a mért határvonalakon értelmes.
+- Laptop / Endpoint: 91.3% → **97.1%** (the extension worked),
+- Printers & Devices: 86.2% → 86.2% (flat),
+- **Security: 79.5% → 78.2%** (did not improve), overall 94.0% (SC failed).
+- Diagnosis: Security was not a quantity problem but a **convention
+  problem**. In the 001 T017 review the owner ruled "MFA push not arriving"
+  type rows as Security, while the teacher labeled these Access Management in
+  the training set (a strong 158-row convention). The 100 generated Security
+  rows could not override that.
+- Open question: the cause of Printers & Devices' flatness was unknown — so
+  the first step is a **confusion measurement** (which category it is confused
+  with), because a fix only makes sense when targeted at measured borders.
 
 ## User Scenarios & Testing *(mandatory)*
 
-### User Story 1 - Konfúziós térkép (Priority: P1)
+### User Story 1 - Confusion map (Priority: P1)
 
-A felhasználó először pontosan látni akarja, hogy a modell hol téved: melyik
-kategória melyikkel keveredik a fagyott teszten, soronként listázva.
+The owner first wants to see exactly where the model errs: which category is
+confused with which on the frozen test, row by row.
 
-**Why this priority**: A 002 tanulsága, hogy találgatással pótolt adat nem
-javít (Security). A javítás csak a mért konfúziós párokra célozva értelmes.
+**Why this priority**: The 002 lesson is that data added on gut feeling does
+not fix (Security). A fix only makes sense targeted at measured confusion
+pairs.
 
-**Independent Test**: egy parancs kiírja a konfúziós mátrixot és a tévesztett
-sorok listáját (szöveg, helyes címke, jósolt címke).
+**Independent Test**: one command prints the confusion matrix and the list of
+misclassified rows (text, true label, predicted label).
 
 **Acceptance Scenarios**:
 
-1. **Given** a 002-es modell és a fagyott teszt, **When** fut a riport,
-   **Then** minden tévesztett sor látszik a helyes és a jósolt címkével.
+1. **Given** the 002 model and the frozen test, **When** the report runs,
+   **Then** every misclassified row is listed with its true and predicted
+   label.
 
 ---
 
-### User Story 2 - Határeset-átütemezés a felhasználó táblája szerint (Priority: P1)
+### User Story 2 - Borderline relabeling per the owner's table (Priority: P1)
 
-A felhasználó egy explicit táblát kap a tanítóhalmaz határeset-jelöltjeiről
-(kulcsszavas jelöltek, jelenlegi címke, javasolt címke), átnézi/javítja, és a
-jóváhagyott tábla szerint íródnak át a címkék.
+The owner receives an explicit table of borderline candidates from the
+training set (keyword-based candidates, current label, suggested label),
+reviews/corrects it, and labels are rewritten according to the approved
+table.
 
-**Why this priority**: Ez a feature tényleges javítása; a konvenció a
-felhasználóé, nem a tanáré.
+**Why this priority**: This is the feature's actual fix; the convention is
+the owner's, not the teacher's.
 
-**Independent Test**: az átcímkézés naplózott, visszafordítható (a 001/002-es
-tanítóhalmaz érintetlen marad), és az átírt sorok száma pontosan a jóváhagyott
-táblának felel meg.
+**Independent Test**: the relabeling is logged, reversible (the 001/002
+training sets remain untouched), and the number of rewritten rows matches the
+approved table exactly.
 
 **Acceptance Scenarios**:
 
-1. **Given** a jelöltlista, **When** a felhasználó jóváhagyja (esetleg
-   módosítva), **Then** csak a jóváhagyott sorok címkéje változik.
-2. **Given** az átcímkézett tanítóhalmaz, **When** a split-ellenőrző fut,
-   **Then** 0 átfedés a fagyott teszttel (id + szöveg), mint eddig.
+1. **Given** the candidate list, **When** the owner approves it (possibly
+   modified), **Then** only the approved rows' labels change.
+2. **Given** the relabeled training set, **When** the split checker runs,
+   **Then** 0 overlap with the frozen test (id + text), as before.
 
 ---
 
-### User Story 3 - Újramérés és ítélet (Priority: P1)
+### User Story 3 - Re-measurement and verdict (Priority: P1)
 
-A javított tanítóhalmazon, változatlan recepttel, 3 seeddel újramért modell
-eredménye a baseline-okhoz (zaj: 12%; teacher: 93,3%; boost: 94,0%)
-viszonyítva, nem-átfedő intervallum-szabállyal.
+The model re-measured on the fixed training set with the unchanged recipe and
+3 seeds, compared to the baselines (noise: 12%; teacher: 93.3%; boost: 94.0%),
+with the non-overlapping-interval rule.
 
 **Acceptance Scenarios**:
 
-1. **Given** az újramérés, **When** az SC-gate fut, **Then** a riport
-   kategóriánként mutatja a három baseline-t és az új értéket.
+1. **Given** the re-measurement, **When** the SC gate runs, **Then** the
+   report shows all three baselines and the new value per category.
 
 ### Edge Cases
 
-- A határeset-átütemezés „oldalra billenti" a modellt (pl. most az Access
-  Management romlik): az SC-003 védelem fogja.
-- A jelöltlista túl agresszív (tényleges Access-ticketek is átcsúsznának):
-  a felhasználó review-ja (MANUÁLIS KAPU) szűri.
-- A konvenció belsőleg ellentmondásos (ugyanolyan szöveg két halmazban mást
-  kapna): a review ezt is jelzi; a fagyott teszt konvenciója az irányadó.
+- The borderline relabeling "tilts" the model sideways (e.g. Access
+  Management now degrades): the SC-003 protection catches it.
+- The candidate list is too aggressive (genuine Access tickets would be
+  moved): the owner's review (MANUAL GATE) filters it.
+- The convention is internally contradictory (identical text would get
+  different labels in two sets): the review flags this too; the frozen test's
+  convention is authoritative.
 
 ## Requirements *(mandatory)*
 
 ### Functional Requirements
 
-- **FR-001**: Készüljön konfúziós riport: mátrix + tévesztett sorok listája
-  (szöveg, helyes, jósolt), a 002-es modellen, a fagyott teszten.
-- **FR-002**: A határeset-jelöltek kigyűjtése dokumentált, kulcsszavas
-  szabállyal történjen (a szabály a riport része).
-- **FR-003**: Az átcímkézés csak a felhasználó által jóváhagyott sorokon
-  történhet (MANUÁLIS KAPU), új, verziózott tanítófájlba; az előző
-  tanítóhalmazok érintetlenek maradnak (visszafordíthatóság).
-- **FR-004**: A recept változatlan (mint a 002-ben); 3 seed (0, 1, 2); fagyott
-  teszt változatlan.
-- **FR-005**: A riport a 3 korábbi referenciához viszonyít (zaj / teacher /
-  boost), nem-átfedő intervallum-ítélettel.
+- **FR-001**: A confusion report: matrix + list of misclassified rows (text,
+  true, predicted), on the 002 model, on the frozen test.
+- **FR-002**: Borderline candidates are collected with a documented,
+  keyword-based rule (the rule is part of the report).
+- **FR-003**: Relabeling may only happen on rows approved by the owner
+  (MANUAL GATE), into a new versioned training file; the previous training
+  sets remain untouched (reversibility).
+- **FR-004**: The recipe is unchanged (as in 002); 3 seeds (0, 1, 2); frozen
+  test unchanged.
+- **FR-005**: The report compares against the 3 previous references
+  (noise / teacher / boost), with a non-overlapping-interval verdict.
 
 ### Key Entities
 
-- **Konfúziós pár**: (helyes címke, jósolt címke) gyakorisággal és sorlistával.
-- **Határeset-jelölt**: tanítósor, amely kulcsszabály alapján másik
-  kategóriába tartozhat; felhasználói döntés vár rá.
-- **Átütemezett tanítóhalmaz**: a 002-es halmaz + a jóváhagyott címkeváltások;
-  külön verziózott fájl.
+- **Confusion pair**: (true label, predicted label) with frequency and row
+  list.
+- **Borderline candidate**: a train row that may belong to another category
+  per a keyword rule; awaits the owner's decision.
+- **Relabeled training set**: the 002 set + the approved label changes; a
+  separate versioned file.
 
 ## Success Criteria *(mandatory)*
 
 ### Measurable Outcomes
 
-- **SC-001**: Security ≥ 90% átlag (3 seed), minden seed ≥ 85%; Printers &
-  Devices ≥ 90% átlag — a fagyott teszten.
-- **SC-002**: Összpontosság ≥ 95% (3-seedes átlag), nem-átfedő intervallummal
-  a 002-es 94,0% ± 0,5%-hoz képest.
-- **SC-003 (védelem)**: a ≥96%-os kategóriák nem romlanak 2 pontnál többel;
-  Laptop/Endpoint nem romlik a 002-es 97,1%-ról 2 pontnál többel.
-- **SC-004**: a tévesztési riport létezik, és a javítás a mért konfúziós
-  párokat célozta (a riportban nyomon követhető).
+- **SC-001**: Security ≥ 90% mean (3 seeds), every seed ≥ 85%; Printers &
+  Devices ≥ 90% mean — on the frozen test.
+- **SC-002**: Overall accuracy ≥ 95% (3-seed mean), with a non-overlapping
+  interval versus 002's 94.0% ± 0.5%.
+- **SC-003 (protection)**: the ≥96% categories do not degrade by more than 2
+  points; Laptop/Endpoint does not drop more than 2 points from its 002 value
+  of 97.1%.
+- **SC-004**: the misclassification report exists, and the fix targeted the
+  measured confusion pairs (traceable in the report).
 
 ## Assumptions
 
-- A fagyott teszthalmaz konvenciója (a felhasználó T017-es döntései) az
-  irányadó; a tanár konvenciója felülírható.
-- A konvenció-konfliktus lokalizált: az MFA/jelszó/SSO és a
-  periféria/endpoint határvonalakra korlátozódik.
-- Kimenő adatforgalom ebben a feature-ben nem kell (csak átcímkézés és
-  tanítás) — ha mégis kellene, az külön jóváhagyás.
+- The frozen test set's convention (the owner's T017 decisions) is
+  authoritative; the teacher's convention can be overridden.
+- The convention conflict is localized: limited to the MFA/password/SSO and
+  peripheral/endpoint borders.
+- No outbound data traffic is needed in this feature (relabeling and training
+  only) — if it were needed, separate approval is required.
 
 ## Out of Scope
 
-- Új szintetikus példák gyártása (a 002 eszköze; itt csak átcímkézés).
-  *Újraindítási feltétel: ha az átütemezés után is darabszám-probléma mérhető.*
-- Küszöbkalibráció / DSPy (kizárva, mint a 002-ben).
-- A fagyott teszthalmaz módosítása. *Újraindítási feltétel: külön spec, ha a
-  konvenció maga változik.*
+- Generating new synthetic examples (002's tool; only relabeling here).
+  *Restart condition: if a data-quantity problem is still measurable after
+  the relabeling.*
+- Threshold calibration / DSPy (excluded, as in 002).
+- Modifying the frozen test set. *Restart condition: separate spec, if the
+  convention itself changes.* (This later became feature 004.)

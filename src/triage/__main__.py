@@ -48,6 +48,13 @@ def main(argv=None) -> int:
     s.add_argument("--run", required=True)
     s.add_argument("--out", default="runs/003-confusion")
 
+    s = sub.add_parser("testconflicts", help="teszthalmaz duplikátum-konfliktusai")
+    s.add_argument("--test", default="data/labels/handchecked_test.jsonl")
+    s.add_argument("--out", default="runs/004-conflicts")
+    s.add_argument("--decisions", default="data/labels/testset_decisions.csv")
+    s.add_argument("--exit-code", action="store_true",
+                   help="0 ha nincs konfliktus, 1 ha van (SC-001 gate)")
+
     s = sub.add_parser("predict", help="egy ticket osztályozása")
     s.add_argument("--run", required=True)
     s.add_argument("text")
@@ -130,6 +137,22 @@ def main(argv=None) -> int:
         for c in top_confusions(rep):
             print(f"  {c['true']} -> {c['pred']}: {c['n']} sor")
         return 0
+
+    if args.cmd == "testconflicts":
+        from triage.testset import find_conflicts, write_decisions_template
+        groups = find_conflicts(args.test)
+        out_dir = Path(args.out)
+        out_dir.mkdir(parents=True, exist_ok=True)
+        (out_dir / "report.json").write_text(
+            json.dumps({"test_file": args.test, "n_conflicts": len(groups),
+                        "conflicts": groups}, ensure_ascii=False, indent=2),
+            encoding="utf-8")
+        if groups:
+            write_decisions_template(groups, args.decisions)
+        print(f"konfliktusos csoportok: {len(groups)} -> {args.out}/report.json")
+        for g in groups:
+            print(f"  {g['count']}x | {g['labels']} | {g['texts'][0][:70]}")
+        return (1 if groups else 0) if args.exit_code else 0
 
     if args.cmd == "predict":
         from triage.predict import predict_one
