@@ -16,6 +16,7 @@ Fejlesztési módszer: Spec-Driven Development — lásd `specs/constitution.md`
 python -m venv .venv
 .venv\Scripts\activate          # Windows
 pip install -r requirements.txt # pinnelt verziók, CPU torch
+pip install -e .                # a triage csomag telepítése (python -m triage)
 
 # adat: a mindweave minta letöltése data/raw/ alá (tickets.csv, categories.csv)
 # FIGYELEM: a minta gyári címkéi zaj (baseline-mérés: 12% = véletlenszint),
