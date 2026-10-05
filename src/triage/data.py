@@ -93,6 +93,33 @@ def write_recipe_format(train: pl.DataFrame, test: pl.DataFrame, out_dir) -> Non
                 f.write(json.dumps(row, ensure_ascii=False) + "\n")
 
 
+def merge_generated(train: pl.DataFrame, generated_jsonl, caps: dict[str, int],
+                    test_df: pl.DataFrame, seed: int = 0) -> pl.DataFrame:
+    """002-es bővítés: tanítóhalmaz + jóváhagyott gyártott példák (plan D1–D3).
+
+    caps: kategóriánkénti felső határ a beolvasztott gyártott sorokra
+    (a plan altéma-arányai: Security ~100, P&D ~60, Laptop ~40).
+    Ellenőrzés: 0 átfedés a teszttel id ÉS normalizált szöveg szerint (FR-003).
+    """
+    from triage.generate import normalize_text
+
+    gen = pl.DataFrame(load_jsonl(generated_jsonl))
+    test_texts = {normalize_text(t) for t in test_df["text"].to_list()}
+    parts = [train]
+    for label, cap in caps.items():
+        part = gen.filter(pl.col("label") == label)
+        part = part.sample(fraction=1.0, shuffle=True, seed=seed).head(cap)
+        parts.append(part.select(["task", "id", "text", "label"])
+                     if "task" in part.columns else
+                     part.with_columns(pl.lit(TASK).alias("task"))
+                         .select(["task", "id", "text", "label"]))
+    merged = pl.concat(parts)
+    assert_no_overlap(merged, test_df)
+    hits = [t for t in merged["text"].to_list() if normalize_text(t) in test_texts]
+    assert not hits, f"szöveg-átfedés a teszttel: {len(hits)} sor"
+    return merged
+
+
 def tidy_and_split(texts_parquet, teacher_jsonl, handchecked_jsonl, tidy_dir, tasks_dir,
                    seed=0):
     """A Phase 6 végpontja: texts + tanár + kézi teszt -> tidy Parquet + recipe jsonl."""

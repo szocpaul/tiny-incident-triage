@@ -37,6 +37,17 @@ def main(argv=None) -> int:
     s.add_argument("--start", type=int, default=4, help="kezdő párhuzamosság")
     s.add_argument("--limit", type=int, default=None, help="próba: csak N sor")
 
+    s = sub.add_parser("generate", help="szintetikus ticketek gyártása (gyenge kategóriák)")
+    s.add_argument("--out", default="data/labels/generated_v2.jsonl")
+    s.add_argument("--handchecked", default="data/labels/handchecked_test.jsonl")
+    s.add_argument("--per-subtopic", type=int, default=5)
+    s.add_argument("--n-per-call", type=int, default=5)
+    s.add_argument("--seed", type=int, default=0)
+
+    s = sub.add_parser("confusion", help="konfúziós riport a fagyott teszten")
+    s.add_argument("--run", required=True)
+    s.add_argument("--out", default="runs/003-confusion")
+
     s = sub.add_parser("predict", help="egy ticket osztályozása")
     s.add_argument("--run", required=True)
     s.add_argument("text")
@@ -93,6 +104,32 @@ def main(argv=None) -> int:
         ok = stats["valid_rate"] is not None and stats["valid_rate"] >= 0.99
         print(f"SC-005 (>=99% érvényes): {'TELJESÜL' if ok else 'NEM TELJESÜL'}")
         return 0 if ok else 1
+
+    if args.cmd == "generate":
+        import asyncio
+        from triage.generate import generate_all
+        stats = asyncio.run(generate_all(args.out, args.handchecked,
+                                         per_subtopic=args.per_subtopic,
+                                         n_per_call=args.n_per_call,
+                                         seed=args.seed))
+        print(json.dumps(stats, ensure_ascii=False, indent=2))
+        return 0
+
+    if args.cmd == "confusion":
+        import polars as pl
+        from triage.confusion import confusion_report, top_confusions
+        from triage.evaluate import predict_texts
+        test_df = pl.read_parquet("data/tidy/test.parquet")
+        labels = sorted(test_df["label"].unique().to_list())
+        y_pred = predict_texts(Path(args.run) / "model", test_df["text"].to_list())
+        rep = confusion_report(test_df["id"].to_list(), test_df["text"].to_list(),
+                               test_df["label"].to_list(), y_pred, labels,
+                               out_dir=args.out)
+        print(f"accuracy: {rep['accuracy']:.1%} (n={rep['n_test']}), "
+              f"tévesztve: {len(rep['misclassified'])}")
+        for c in top_confusions(rep):
+            print(f"  {c['true']} -> {c['pred']}: {c['n']} sor")
+        return 0
 
     if args.cmd == "predict":
         from triage.predict import predict_one
