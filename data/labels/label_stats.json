@@ -1,0 +1,13 @@
+{
+  "model": "kimi-code:k3",
+  "requested": 1000,
+  "newly_labeled": 995,
+  "skipped_already_done": 5,
+  "invalid": 3,
+  "valid_rate": 0.9969849246231156,
+  "seconds": 421.1,
+  "tokens_in": 171503,
+  "tokens_out": 97815,
+  "throttle_ended_at": 19,
+  "throttle_lowest": 4
+}

@@ -1,0 +1,15 @@
+{
+  "model": "kimi-code:k3",
+  "jobs": 95,
+  "failed_jobs": 0,
+  "generated_raw": 475,
+  "non_english_dropped": 0,
+  "after_dedup": 475,
+  "dedup_dropped": 0,
+  "seconds": 122.0,
+  "per_category": {
+    "Security": 175,
+    "Printers & Devices": 150,
+    "Laptop / Endpoint": 150
+  }
+}

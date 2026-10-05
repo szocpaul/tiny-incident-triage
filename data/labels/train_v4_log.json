@@ -1,0 +1,8 @@
+{
+  "relabels_applied": 100,
+  "reverted_rule": "shared-drive-network",
+  "teams_calls_moved": [
+    "servicenow_ticket_triage-100",
+    "servicenow_ticket_triage-653"
+  ]
+}

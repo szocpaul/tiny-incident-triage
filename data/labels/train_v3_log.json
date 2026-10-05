@@ -1,0 +1,422 @@
+[
+  {
+    "id": "servicenow_ticket_triage-2",
+    "relabel_to": "Printers & Devices"
+  },
+  {
+    "id": "servicenow_ticket_triage-5",
+    "relabel_to": "Security"
+  },
+  {
+    "id": "servicenow_ticket_triage-9",
+    "relabel_to": "Printers & Devices"
+  },
+  {
+    "id": "servicenow_ticket_triage-11",
+    "relabel_to": "Printers & Devices"
+  },
+  {
+    "id": "servicenow_ticket_triage-14",
+    "relabel_to": "Security"
+  },
+  {
+    "id": "servicenow_ticket_triage-53",
+    "relabel_to": "Security"
+  },
+  {
+    "id": "servicenow_ticket_triage-63",
+    "relabel_to": "Printers & Devices"
+  },
+  {
+    "id": "servicenow_ticket_triage-68",
+    "relabel_to": "Security"
+  },
+  {
+    "id": "servicenow_ticket_triage-83",
+    "relabel_to": "Printers & Devices"
+  },
+  {
+    "id": "servicenow_ticket_triage-88",
+    "relabel_to": "Printers & Devices"
+  },
+  {
+    "id": "servicenow_ticket_triage-93",
+    "relabel_to": "Security"
+  },
+  {
+    "id": "servicenow_ticket_triage-98",
+    "relabel_to": "ERP / WMS"
+  },
+  {
+    "id": "servicenow_ticket_triage-111",
+    "relabel_to": "Security"
+  },
+  {
+    "id": "servicenow_ticket_triage-119",
+    "relabel_to": "Security"
+  },
+  {
+    "id": "servicenow_ticket_triage-122",
+    "relabel_to": "Security"
+  },
+  {
+    "id": "servicenow_ticket_triage-123",
+    "relabel_to": "Printers & Devices"
+  },
+  {
+    "id": "servicenow_ticket_triage-131",
+    "relabel_to": "Printers & Devices"
+  },
+  {
+    "id": "servicenow_ticket_triage-144",
+    "relabel_to": "Printers & Devices"
+  },
+  {
+    "id": "servicenow_ticket_triage-154",
+    "relabel_to": "Printers & Devices"
+  },
+  {
+    "id": "servicenow_ticket_triage-159",
+    "relabel_to": "Security"
+  },
+  {
+    "id": "servicenow_ticket_triage-175",
+    "relabel_to": "ERP / WMS"
+  },
+  {
+    "id": "servicenow_ticket_triage-192",
+    "relabel_to": "Printers & Devices"
+  },
+  {
+    "id": "servicenow_ticket_triage-194",
+    "relabel_to": "Printers & Devices"
+  },
+  {
+    "id": "servicenow_ticket_triage-195",
+    "relabel_to": "ERP / WMS"
+  },
+  {
+    "id": "servicenow_ticket_triage-216",
+    "relabel_to": "Printers & Devices"
+  },
+  {
+    "id": "servicenow_ticket_triage-219",
+    "relabel_to": "ERP / WMS"
+  },
+  {
+    "id": "servicenow_ticket_triage-228",
+    "relabel_to": "Network & VPN"
+  },
+  {
+    "id": "servicenow_ticket_triage-247",
+    "relabel_to": "Security"
+  },
+  {
+    "id": "servicenow_ticket_triage-253",
+    "relabel_to": "Security"
+  },
+  {
+    "id": "servicenow_ticket_triage-254",
+    "relabel_to": "ERP / WMS"
+  },
+  {
+    "id": "servicenow_ticket_triage-257",
+    "relabel_to": "Printers & Devices"
+  },
+  {
+    "id": "servicenow_ticket_triage-259",
+    "relabel_to": "Security"
+  },
+  {
+    "id": "servicenow_ticket_triage-264",
+    "relabel_to": "Security"
+  },
+  {
+    "id": "servicenow_ticket_triage-267",
+    "relabel_to": "Printers & Devices"
+  },
+  {
+    "id": "servicenow_ticket_triage-300",
+    "relabel_to": "ERP / WMS"
+  },
+  {
+    "id": "servicenow_ticket_triage-308",
+    "relabel_to": "Printers & Devices"
+  },
+  {
+    "id": "servicenow_ticket_triage-309",
+    "relabel_to": "Security"
+  },
+  {
+    "id": "servicenow_ticket_triage-310",
+    "relabel_to": "Printers & Devices"
+  },
+  {
+    "id": "servicenow_ticket_triage-316",
+    "relabel_to": "Security"
+  },
+  {
+    "id": "servicenow_ticket_triage-335",
+    "relabel_to": "Printers & Devices"
+  },
+  {
+    "id": "servicenow_ticket_triage-336",
+    "relabel_to": "Printers & Devices"
+  },
+  {
+    "id": "servicenow_ticket_triage-338",
+    "relabel_to": "Security"
+  },
+  {
+    "id": "servicenow_ticket_triage-357",
+    "relabel_to": "ERP / WMS"
+  },
+  {
+    "id": "servicenow_ticket_triage-359",
+    "relabel_to": "Security"
+  },
+  {
+    "id": "servicenow_ticket_triage-362",
+    "relabel_to": "Printers & Devices"
+  },
+  {
+    "id": "servicenow_ticket_triage-363",
+    "relabel_to": "Printers & Devices"
+  },
+  {
+    "id": "servicenow_ticket_triage-407",
+    "relabel_to": "Printers & Devices"
+  },
+  {
+    "id": "servicenow_ticket_triage-428",
+    "relabel_to": "Printers & Devices"
+  },
+  {
+    "id": "servicenow_ticket_triage-429",
+    "relabel_to": "Security"
+  },
+  {
+    "id": "servicenow_ticket_triage-433",
+    "relabel_to": "Network & VPN"
+  },
+  {
+    "id": "servicenow_ticket_triage-434",
+    "relabel_to": "Security"
+  },
+  {
+    "id": "servicenow_ticket_triage-455",
+    "relabel_to": "Printers & Devices"
+  },
+  {
+    "id": "servicenow_ticket_triage-464",
+    "relabel_to": "Printers & Devices"
+  },
+  {
+    "id": "servicenow_ticket_triage-468",
+    "relabel_to": "ERP / WMS"
+  },
+  {
+    "id": "servicenow_ticket_triage-490",
+    "relabel_to": "Security"
+  },
+  {
+    "id": "servicenow_ticket_triage-522",
+    "relabel_to": "Security"
+  },
+  {
+    "id": "servicenow_ticket_triage-534",
+    "relabel_to": "Security"
+  },
+  {
+    "id": "servicenow_ticket_triage-555",
+    "relabel_to": "Security"
+  },
+  {
+    "id": "servicenow_ticket_triage-560",
+    "relabel_to": "Security"
+  },
+  {
+    "id": "servicenow_ticket_triage-566",
+    "relabel_to": "Printers & Devices"
+  },
+  {
+    "id": "servicenow_ticket_triage-570",
+    "relabel_to": "Printers & Devices"
+  },
+  {
+    "id": "servicenow_ticket_triage-573",
+    "relabel_to": "ERP / WMS"
+  },
+  {
+    "id": "servicenow_ticket_triage-589",
+    "relabel_to": "Printers & Devices"
+  },
+  {
+    "id": "servicenow_ticket_triage-601",
+    "relabel_to": "Printers & Devices"
+  },
+  {
+    "id": "servicenow_ticket_triage-608",
+    "relabel_to": "Printers & Devices"
+  },
+  {
+    "id": "servicenow_ticket_triage-618",
+    "relabel_to": "Security"
+  },
+  {
+    "id": "servicenow_ticket_triage-636",
+    "relabel_to": "Printers & Devices"
+  },
+  {
+    "id": "servicenow_ticket_triage-646",
+    "relabel_to": "Printers & Devices"
+  },
+  {
+    "id": "servicenow_ticket_triage-656",
+    "relabel_to": "Printers & Devices"
+  },
+  {
+    "id": "servicenow_ticket_triage-658",
+    "relabel_to": "Printers & Devices"
+  },
+  {
+    "id": "servicenow_ticket_triage-664",
+    "relabel_to": "Printers & Devices"
+  },
+  {
+    "id": "servicenow_ticket_triage-676",
+    "relabel_to": "Network & VPN"
+  },
+  {
+    "id": "servicenow_ticket_triage-690",
+    "relabel_to": "Security"
+  },
+  {
+    "id": "servicenow_ticket_triage-698",
+    "relabel_to": "ERP / WMS"
+  },
+  {
+    "id": "servicenow_ticket_triage-711",
+    "relabel_to": "Security"
+  },
+  {
+    "id": "servicenow_ticket_triage-720",
+    "relabel_to": "Printers & Devices"
+  },
+  {
+    "id": "servicenow_ticket_triage-751",
+    "relabel_to": "Printers & Devices"
+  },
+  {
+    "id": "servicenow_ticket_triage-753",
+    "relabel_to": "Security"
+  },
+  {
+    "id": "servicenow_ticket_triage-758",
+    "relabel_to": "Printers & Devices"
+  },
+  {
+    "id": "servicenow_ticket_triage-773",
+    "relabel_to": "Printers & Devices"
+  },
+  {
+    "id": "servicenow_ticket_triage-779",
+    "relabel_to": "ERP / WMS"
+  },
+  {
+    "id": "servicenow_ticket_triage-786",
+    "relabel_to": "Security"
+  },
+  {
+    "id": "servicenow_ticket_triage-809",
+    "relabel_to": "Printers & Devices"
+  },
+  {
+    "id": "servicenow_ticket_triage-852",
+    "relabel_to": "Security"
+  },
+  {
+    "id": "servicenow_ticket_triage-861",
+    "relabel_to": "ERP / WMS"
+  },
+  {
+    "id": "servicenow_ticket_triage-879",
+    "relabel_to": "Printers & Devices"
+  },
+  {
+    "id": "servicenow_ticket_triage-883",
+    "relabel_to": "ERP / WMS"
+  },
+  {
+    "id": "servicenow_ticket_triage-888",
+    "relabel_to": "Security"
+  },
+  {
+    "id": "servicenow_ticket_triage-906",
+    "relabel_to": "Security"
+  },
+  {
+    "id": "servicenow_ticket_triage-907",
+    "relabel_to": "Printers & Devices"
+  },
+  {
+    "id": "servicenow_ticket_triage-943",
+    "relabel_to": "Printers & Devices"
+  },
+  {
+    "id": "servicenow_ticket_triage-952",
+    "relabel_to": "Security"
+  },
+  {
+    "id": "servicenow_ticket_triage-954",
+    "relabel_to": "ERP / WMS"
+  },
+  {
+    "id": "servicenow_ticket_triage-957",
+    "relabel_to": "Printers & Devices"
+  },
+  {
+    "id": "servicenow_ticket_triage-959",
+    "relabel_to": "Security"
+  },
+  {
+    "id": "servicenow_ticket_triage-970",
+    "relabel_to": "Printers & Devices"
+  },
+  {
+    "id": "servicenow_ticket_triage-987",
+    "relabel_to": "Security"
+  },
+  {
+    "id": "servicenow_ticket_triage-996",
+    "relabel_to": "Printers & Devices"
+  },
+  {
+    "id": "gen-v1-Secu-23-1",
+    "relabel_to": "Network & VPN"
+  },
+  {
+    "id": "gen-v1-Lapt-87-0",
+    "relabel_to": "Network & VPN"
+  },
+  {
+    "id": "gen-v1-Lapt-90-1",
+    "relabel_to": "Printers & Devices"
+  },
+  {
+    "id": "gen-v1-Lapt-93-4",
+    "relabel_to": "Printers & Devices"
+  },
+  {
+    "id": "gen-v1-Lapt-91-3",
+    "relabel_to": "Printers & Devices"
+  },
+  {
+    "id": "gen-v1-Lapt-90-3",
+    "relabel_to": "Printers & Devices"
+  },
+  {
+    "id": "gen-v1-Lapt-94-0",
+    "relabel_to": "Printers & Devices"
+  }
+]
