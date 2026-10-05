@@ -1,0 +1,124 @@
+{
+  "n_test": 200,
+  "accuracy": 0.97,
+  "matrix": {
+    "Access Management": {
+      "Access Management": 24,
+      "ERP / WMS": 0,
+      "Email & Collaboration": 0,
+      "Laptop / Endpoint": 0,
+      "Network & VPN": 0,
+      "Printers & Devices": 0,
+      "Security": 0,
+      "Telephony": 0
+    },
+    "ERP / WMS": {
+      "Access Management": 0,
+      "ERP / WMS": 25,
+      "Email & Collaboration": 0,
+      "Laptop / Endpoint": 0,
+      "Network & VPN": 0,
+      "Printers & Devices": 0,
+      "Security": 0,
+      "Telephony": 0
+    },
+    "Email & Collaboration": {
+      "Access Management": 0,
+      "ERP / WMS": 0,
+      "Email & Collaboration": 23,
+      "Laptop / Endpoint": 0,
+      "Network & VPN": 0,
+      "Printers & Devices": 0,
+      "Security": 1,
+      "Telephony": 1
+    },
+    "Laptop / Endpoint": {
+      "Access Management": 0,
+      "ERP / WMS": 0,
+      "Email & Collaboration": 0,
+      "Laptop / Endpoint": 20,
+      "Network & VPN": 3,
+      "Printers & Devices": 0,
+      "Security": 0,
+      "Telephony": 0
+    },
+    "Network & VPN": {
+      "Access Management": 0,
+      "ERP / WMS": 0,
+      "Email & Collaboration": 0,
+      "Laptop / Endpoint": 0,
+      "Network & VPN": 25,
+      "Printers & Devices": 0,
+      "Security": 0,
+      "Telephony": 0
+    },
+    "Printers & Devices": {
+      "Access Management": 0,
+      "ERP / WMS": 0,
+      "Email & Collaboration": 0,
+      "Laptop / Endpoint": 0,
+      "Network & VPN": 0,
+      "Printers & Devices": 29,
+      "Security": 0,
+      "Telephony": 0
+    },
+    "Security": {
+      "Access Management": 0,
+      "ERP / WMS": 0,
+      "Email & Collaboration": 0,
+      "Laptop / Endpoint": 1,
+      "Network & VPN": 0,
+      "Printers & Devices": 0,
+      "Security": 25,
+      "Telephony": 0
+    },
+    "Telephony": {
+      "Access Management": 0,
+      "ERP / WMS": 0,
+      "Email & Collaboration": 0,
+      "Laptop / Endpoint": 0,
+      "Network & VPN": 0,
+      "Printers & Devices": 0,
+      "Security": 0,
+      "Telephony": 23
+    }
+  },
+  "misclassified": [
+    {
+      "id": "servicenow_ticket_triage-432",
+      "text": "Spam burst hit shared support inbox this morning.. Spam burst hit shared support inbox this morning. Reported by Ronald from Warehouse.",
+      "true": "Email & Collaboration",
+      "pred": "Security"
+    },
+    {
+      "id": "servicenow_ticket_triage-480",
+      "text": "User cannot map shared drive from new laptop.. User cannot map shared drive from new laptop. Reported by Kathy from HR.",
+      "true": "Laptop / Endpoint",
+      "pred": "Network & VPN"
+    },
+    {
+      "id": "servicenow_ticket_triage-39",
+      "text": "User cannot map shared drive from new laptop.. User cannot map shared drive from new laptop. Reported by Michelle from Warehouse.",
+      "true": "Laptop / Endpoint",
+      "pred": "Network & VPN"
+    },
+    {
+      "id": "servicenow_ticket_triage-820",
+      "text": "User cannot map shared drive from new laptop.. User cannot map shared drive from new laptop. Reported by Janet from Operations.",
+      "true": "Laptop / Endpoint",
+      "pred": "Network & VPN"
+    },
+    {
+      "id": "servicenow_ticket_triage-387",
+      "text": "Excel add-in blocked by security policy.. Excel add-in blocked by security policy. Reported by David from HR.",
+      "true": "Security",
+      "pred": "Laptop / Endpoint"
+    },
+    {
+      "id": "servicenow_ticket_triage-66",
+      "text": "Teams calls dropping audio after two minutes.. Teams calls dropping audio after two minutes. Reported by Kimberly from HR.",
+      "true": "Email & Collaboration",
+      "pred": "Telephony"
+    }
+  ]
+}

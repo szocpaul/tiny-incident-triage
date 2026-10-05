@@ -1,0 +1,178 @@
+{
+  "timestamp": "2026-10-05T09:52:08Z",
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "accuracies": [
+    0.12,
+    0.12,
+    0.12
+  ],
+  "mean_accuracy": 0.12,
+  "stdev_accuracy": 0.0,
+  "n_test": 200,
+  "total_seconds": 777.8,
+  "per_category_mean": {
+    "Access Management": {
+      "n": 25,
+      "mean": 0.10666666666666666,
+      "min": 0.04
+    },
+    "ERP / WMS": {
+      "n": 25,
+      "mean": 0.18666666666666668,
+      "min": 0.12
+    },
+    "Email & Collaboration": {
+      "n": 25,
+      "mean": 0.08,
+      "min": 0.04
+    },
+    "Laptop / Endpoint": {
+      "n": 25,
+      "mean": 0.09333333333333334,
+      "min": 0.08
+    },
+    "Network & VPN": {
+      "n": 25,
+      "mean": 0.12,
+      "min": 0.08
+    },
+    "Printers & Devices": {
+      "n": 25,
+      "mean": 0.08,
+      "min": 0.04
+    },
+    "Security": {
+      "n": 25,
+      "mean": 0.18666666666666668,
+      "min": 0.16
+    },
+    "Telephony": {
+      "n": 25,
+      "mean": 0.10666666666666666,
+      "min": 0.08
+    }
+  },
+  "runs": [
+    {
+      "seed": 0,
+      "accuracy": 0.12,
+      "train_seconds": 250.6,
+      "per_category": {
+        "Access Management": {
+          "n": 25,
+          "accuracy": 0.16
+        },
+        "ERP / WMS": {
+          "n": 25,
+          "accuracy": 0.12
+        },
+        "Email & Collaboration": {
+          "n": 25,
+          "accuracy": 0.16
+        },
+        "Laptop / Endpoint": {
+          "n": 25,
+          "accuracy": 0.12
+        },
+        "Network & VPN": {
+          "n": 25,
+          "accuracy": 0.08
+        },
+        "Printers & Devices": {
+          "n": 25,
+          "accuracy": 0.04
+        },
+        "Security": {
+          "n": 25,
+          "accuracy": 0.2
+        },
+        "Telephony": {
+          "n": 25,
+          "accuracy": 0.08
+        }
+      }
+    },
+    {
+      "seed": 1,
+      "accuracy": 0.12,
+      "train_seconds": 259.5,
+      "per_category": {
+        "Access Management": {
+          "n": 25,
+          "accuracy": 0.04
+        },
+        "ERP / WMS": {
+          "n": 25,
+          "accuracy": 0.24
+        },
+        "Email & Collaboration": {
+          "n": 25,
+          "accuracy": 0.04
+        },
+        "Laptop / Endpoint": {
+          "n": 25,
+          "accuracy": 0.08
+        },
+        "Network & VPN": {
+          "n": 25,
+          "accuracy": 0.12
+        },
+        "Printers & Devices": {
+          "n": 25,
+          "accuracy": 0.12
+        },
+        "Security": {
+          "n": 25,
+          "accuracy": 0.2
+        },
+        "Telephony": {
+          "n": 25,
+          "accuracy": 0.12
+        }
+      }
+    },
+    {
+      "seed": 2,
+      "accuracy": 0.12,
+      "train_seconds": 260.0,
+      "per_category": {
+        "Access Management": {
+          "n": 25,
+          "accuracy": 0.12
+        },
+        "ERP / WMS": {
+          "n": 25,
+          "accuracy": 0.2
+        },
+        "Email & Collaboration": {
+          "n": 25,
+          "accuracy": 0.04
+        },
+        "Laptop / Endpoint": {
+          "n": 25,
+          "accuracy": 0.08
+        },
+        "Network & VPN": {
+          "n": 25,
+          "accuracy": 0.16
+        },
+        "Printers & Devices": {
+          "n": 25,
+          "accuracy": 0.08
+        },
+        "Security": {
+          "n": 25,
+          "accuracy": 0.16
+        },
+        "Telephony": {
+          "n": 25,
+          "accuracy": 0.12
+        }
+      }
+    }
+  ]
+}

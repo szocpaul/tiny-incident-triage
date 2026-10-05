@@ -1,0 +1,41 @@
+{
+  "timestamp": "2026-10-05T09:52:08.945335+00:00",
+  "n_test": 200,
+  "accuracy": 0.12,
+  "per_category": {
+    "Access Management": {
+      "n": 25,
+      "accuracy": 0.12
+    },
+    "ERP / WMS": {
+      "n": 25,
+      "accuracy": 0.2
+    },
+    "Email & Collaboration": {
+      "n": 25,
+      "accuracy": 0.04
+    },
+    "Laptop / Endpoint": {
+      "n": 25,
+      "accuracy": 0.08
+    },
+    "Network & VPN": {
+      "n": 25,
+      "accuracy": 0.16
+    },
+    "Printers & Devices": {
+      "n": 25,
+      "accuracy": 0.08
+    },
+    "Security": {
+      "n": 25,
+      "accuracy": 0.16
+    },
+    "Telephony": {
+      "n": 25,
+      "accuracy": 0.12
+    }
+  },
+  "train_seconds": 260.0,
+  "gate_exit_code": 1
+}

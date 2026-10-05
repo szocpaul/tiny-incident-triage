@@ -1,0 +1,26 @@
+{
+  "batch": 32,
+  "lr": 0.0001,
+  "weight_decay": 0.01,
+  "warmup_frac": 0.05,
+  "clip": 1.0,
+  "maxlen": 128,
+  "reference_steps_of": 9493,
+  "min_epochs": 6,
+  "model": "jhu-clsp/ettin-encoder-17m",
+  "seed": 0,
+  "epochs": 74,
+  "labels": [
+    "Access Management",
+    "ERP / WMS",
+    "Email & Collaboration",
+    "Laptop / Endpoint",
+    "Network & VPN",
+    "Printers & Devices",
+    "Security",
+    "Telephony"
+  ],
+  "n_train": 771,
+  "n_test": 200,
+  "train_seconds": 250.6
+}

@@ -1,5 +1,7 @@
 .venv/
-runs/
+runs/**/model/
+runs/*.log
+runs/*.err
 data/raw/
 data/tidy/
 data/tasks/
