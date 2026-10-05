@@ -19,10 +19,10 @@ következik.
 
 ## Phase 1: Setup (Shared Infrastructure)
 
-- [ ] T001 Projektstruktúra létrehozása a plan.md szerint (`src/triage/`, `tests/`,
+- [x] T001 Projektstruktúra létrehozása a plan.md szerint (`src/triage/`, `tests/`,
   `data/tidy/`, `runs/`), projekt-venv a gépen, pinnelt `requirements.txt`
   (torch CPU-wheel, transformers, polars, dpyr, pytest — pontos verziók, Constitution III)
-- [ ] T002 [P] `.gitignore` (runs/, data/, venv) és `src/triage/__init__.py` váz
+- [x] T002 [P] `.gitignore` (runs/, data/, venv) és `src/triage/__init__.py` váz
 
 ---
 
@@ -30,11 +30,11 @@ következik.
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T003 Tesztek ELŐSZÖR: `tests/unit/test_data.py` — a tidy-séma oszlopai
+- [x] T003 Tesztek ELŐSZÖR: `tests/unit/test_data.py` — a tidy-séma oszlopai
   (task, split, id, text, label), a stratifikált split aránya (800/200), a 0
   átfedés train/test között, az érvénytelen címke kihagyása. A teszteknek
   FAIL-ELNIük kell implementáció előtt (FR-001, FR-002)
-- [ ] T004 `src/triage/data.py` — tidy (dpyr: join a kategóriatáblával, text =
+- [x] T004 `src/triage/data.py` — tidy (dpyr: join a kategóriatáblával, text =
   summary + description) + stratifikált split (seed=0, rögzítve) +
   átfedés-ellenőrző, amely hiba esetén megállítja a futást. Kimenet:
   `data/tidy/*.parquet` (tutorial-séma) **és** a repó recipe-sémája:
@@ -60,27 +60,27 @@ fagyott teszthalmazon (SC-001, SC-002)
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T005 [P] [US1] `tests/unit/test_evaluate.py` — a metrika-írás formátuma
+- [x] T005 [P] [US1] `tests/unit/test_evaluate.py` — a metrika-írás formátuma
   (metrics.json: teljes + per-category pontosság), a küszöb alatti eredmény
   nem-nulla exit code-ja; `tests/integration/test_smoke.py` — 40 soros
   szeleten tidy→train(1 epoch)→eval end-to-end lefut
 
 ### Implementation for User Story 1
 
-- [ ] T006 [US1] `src/triage/train.py` — Ettin-17M full fine-tune CPU-n,
+- [x] T006 [US1] `src/triage/train.py` — Ettin-17M full fine-tune CPU-n,
   **pontosan a repó receptje** (referencia: `recipe/train.py`): AdamW lr=1e-4,
   wd=0.01, batch=32, 5% warmup + cosine decay, gradient clipping 1.0,
   cross-entropy, maxlen=128, és **fix lépésszám az epoch-formulával**:
   `epochs = max(6, round(6 * 9493 / tanítósorok))` (800 sorra 71 epoch ≈
   1775 lépés, megegyezően a repó 2000-soros 28-epochos futásával). Minden
   paraméter a run `config.json`-jába (FR-003, FR-008)
-- [ ] T007 [US1] `src/triage/evaluate.py` — teljes + kategóriánkénti pontosság
+- [x] T007 [US1] `src/triage/evaluate.py` — teljes + kategóriánkénti pontosság
   → `runs/<run>/metrics.json`, `--min-accuracy` exit-code gate (FR-004)
-- [ ] T008 [P] [US1] `src/triage/predict.py` — egyedi osztályozás + időmérés
+- [x] T008 [P] [US1] `src/triage/predict.py` — egyedi osztályozás + időmérés
   (SC-004: ≤ 100 ms/db), üres/rövid szöveg jelzése (spec Edge Cases)
-- [ ] T009 [US1] `src/triage/__main__.py` — CLI: `tidy | split | train | eval
+- [x] T009 [US1] `src/triage/__main__.py` — CLI: `tidy | split | train | eval
   | predict` alparancsok egy belépésből
-- [ ] T010 [US1] **Baseline run**: tidy→train→eval **3 seeddel (0, 1, 2)** a
+- [x] T010 [US1] **Baseline run**: tidy→train→eval **3 seeddel (0, 1, 2)** a
   800/200 spliten; a metrics.json az átlagot és a szórást is tartalmazza
   (a repó módszertana: "tables report means of 3 runs"; Constitution I
   zajmérés). Az eredmény `runs/baseline-*/metrics.json`-be íródik (FR-005,
@@ -98,7 +98,7 @@ fagyott teszthalmazon (SC-001, SC-002)
 **Independent Test**: újrafuttatás eltérő run-névvel; a run-napló
 időbélyegeiből a teljes idő ≤ 15 perc (SC-003)
 
-- [ ] T011 [US2] Reprodukálhatósági végpontok: `python -m triage run --name
+- [x] T011 [US2] Reprodukálhatósági végpontok: `python -m triage run --name
   <név>` végrehajtja a tidy→split→train→eval láncot, a konfigot és a
   mért időket a run-mappába írja; a baseline és az új run metrics.json-jei
   egymás mellé kerülnek a riportban (FR-008, SC-003)
@@ -116,29 +116,29 @@ fagyott teszthalmaz; új baseline a valós tartalom szerinti címkéken
 a kézi teszthalmaz verziózott fájl; az új baseline mean_accuracy szignifikánsan
 a 12%-os zaj-baseline fölött van (nem-átfedő intervallum)
 
-- [ ] T014 **[MANUÁLIS KAPU]** A felhasználó bejelentkezik a Kimi
+- [x] T014 **[MANUÁLIS KAPU]** A felhasználó bejelentkezik a Kimi
   Code-fiókjával az lm15 mentett bejelentkezésébe (`lm15.login`). Agent nem
   pipálhatja — a hitelesítés a felhasználó interakciója.
-- [ ] T015 [US1] Tesztek ELŐSZÖR: `tests/unit/test_label.py` — a prompt
+- [x] T015 [US1] Tesztek ELŐSZÖR: `tests/unit/test_label.py` — a prompt
   tartalmazza az instrukciót és a 8 címkét; a válasz-illesztés csak pontos
   címkét fogad el (egyéb = None); a jsonl resumable (újrafuttatásnál nem
   címkéz újra). FAIL előbb. Majd `src/triage/label.py`: lm15 async címkézés,
   alacsony kezdő-throttle (start=4), 60 s timeout, retry exponential
   backoff-fal, `data/labels/teacher.jsonl` + `label_stats.json` (idő, tokenek,
   érvénytelen száma) (FR-008)
-- [ ] T016 [US1] Címkézés futtatása mind az 1000 soron a mentett
+- [x] T016 [US1] Címkézés futtatása mind az 1000 soron a mentett
   bejelentkezéssel; SC-005 ellenőrzés (≥99% érvényes); a futás előtt a
   felhasználó jóváhagyása a kimenő forgalomra (FR-006 kivétel igazolva)
-- [ ] T017 **[MANUÁLIS KAPU]** A felhasználó kézzel átnéz ~200 tanár-címkézett
+- [x] T017 **[MANUÁLIS KAPU]** A felhasználó kézzel átnéz ~200 tanár-címkézett
   sort (rétegzett minta: 25/kategória), javítja, ami rossz; az eredmény
   `data/labels/handchecked_test.jsonl` (fagyott, verziózott). Agent nem
   pipálhatja.
-- [ ] T018 [US1] `data.py` átdolgozás: a tidy most a tanár-címkéket használja;
+- [x] T018 [US1] `data.py` átdolgozás: a tidy most a tanár-címkéket használja;
   a teszthalmaz = a kézzel ellenőrzött fájl; a tanítóhalmaz = tanár-címkék
   mínusz a kézi teszt azonosítói; 0 átfedés mindkét irányban (FR-002, FR-009).
   A T003 tesztek frissítése az új szerződéshez (a zajos category-join kódút
   törlődik)
-- [ ] T019 [US1] **Új baseline**: 3 seed (0, 1, 2) a tanár-címkéken, eval a
+- [x] T019 [US1] **Új baseline**: 3 seed (0, 1, 2) a tanár-címkéken, eval a
   kézi teszthalmazon; `runs/baseline-teacher/metrics.json` (átlag ± szórás).
   Összevetés a 12%-os zaj-baseline-nal; javulás csak nem-átfedő
   intervallumnál fogadható el (Constitution I)
@@ -150,11 +150,11 @@ gate innentől a kézi teszthalmazon fut.
 
 ## Phase 5: Polish & Cross-Cutting Concerns
 
-- [ ] T012 **[MANUÁLIS KAPU]** Teljes SC-validáció: a felhasználó lefuttatja
+- [x] T012 **[MANUÁLIS KAPU]** Teljes SC-validáció: a felhasználó lefuttatja
   `pytest -q` + `python -m triage eval --min-accuracy 0.85` (a kézi
   teszthalmazon) + a predict időmérést, és átnézi a tanár-címkés baseline
   metrics.json-t (SC-001…SC-005). Ezt agent NEM pipálhatja ki.
-- [ ] T013 [P] `README.md` — quickstart (venv, requirements, a CLI-parancsok
+- [x] T013 [P] `README.md` — quickstart (venv, requirements, a CLI-parancsok
   beleértve a `label` lépést, gate-parancs), a repóban
 
 ---
