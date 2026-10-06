@@ -67,3 +67,22 @@ policy").
 - Train/test overlap is 0, verified on every run (by id and normalized text).
 - The frozen test set was versioned (v1 archived, v2 current) with a full
   changelog; the v1 numbers remain valid in their own context.
+
+## Feature 005: full HugBor adoption (new 14-category taxonomy)
+
+After 004, the project switched data sources and taxonomy (owner decision):
+the HugBor/servicenow_incidents_slm6 dataset (1,640 realistic incidents)
+replaced the mindweave-derived data; Software was merged into Application
+after the label-trust spot-check showed the pair is inherently ambiguous
+(local Qwen blind agreement: 85.3% → 88.6% after the merge; the remaining
+borderline pairs are documented and accepted).
+
+| run | overall | probe (8 wild incidents) | notes |
+|---|---|---|---|
+| `005-hugbor` (v5: HugBor + 325 generated top-up rows) | 95.25% ± 0.46 | 6/8, 5/8, 5/8 | SC-004 failed (strict gate) — monitoring-style data didn't cover the end-user voice |
+| `005-uservoice` (v6: + 210 user-voice rows) | **94.55% ± 1.32** | **7/8, 7/8, 7/8** | all gates pass; tiny frozen-test dip (within noise), large robustness gain |
+
+Per-category (v6): 10/14 categories ≥ 92%; the weak pair (Cloud Services
+71.4%, Performance 81.9%) matches the documented taxonomy borderlines.
+Everything was produced locally: the teacher was a local Qwen3.8-27B
+(llama.cpp) — zero cloud LLM traffic, $0.

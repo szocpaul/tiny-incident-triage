@@ -1,0 +1,31 @@
+{
+  "model": "models\\Qwen3.8-27B-UD-Q4_K_M.gguf",
+  "url": "http://127.0.0.1:8080",
+  "thin": {
+    "VPN": 19,
+    "Data Center": 46,
+    "Printer/Peripherals": 13,
+    "Email": 20,
+    "Backup/Recovery": 23,
+    "Hardware": 5,
+    "Cloud Services": 46,
+    "Access Management": 36,
+    "Performance": 6,
+    "Telephony": 58
+  },
+  "generated_raw": 325,
+  "after_dedup": 325,
+  "seconds": 1970.6,
+  "per_category": {
+    "Access Management": 40,
+    "Backup/Recovery": 30,
+    "Cloud Services": 50,
+    "Data Center": 50,
+    "Email": 25,
+    "Hardware": 10,
+    "Performance": 10,
+    "Printer/Peripherals": 20,
+    "Telephony": 65,
+    "VPN": 25
+  }
+}
