@@ -52,24 +52,3 @@ Problem statement (owner approves) → spec.md (owner reviews) → plan.md
 (owner reviews) → tasks.md (test-first, MANUAL GATEs marked) →
 implementation → measurement → owner SC-validation gate. Deferrals are
 decisions too: they go to `specs/BACKLOG.md` with a restart condition.
-
-## .specify/ (official spec-kit layout)
-
-The repo follows the official spec-kit structure (see
-https://github.github.io/spec-kit/reference/agentic-sdd.html):
-
-- `.specify/templates/` — the official templates (spec, plan, tasks,
-  checklist, constitution) from the spec-kit main branch; the source of
-  truth for every artifact's shape.
-- `.specify/memory/constitution.md` — the project constitution (same
-  content as `specs/constitution.md`; update BOTH or link one to the other).
-
-For agents: write artifacts per `.specify/templates/`, overlaid with the
-owner's playbook rules from the constitution (review gates, measurement
-discipline, Background diagnosis, Out of Scope with restart conditions,
-MANUAL GATE marks, max ~14 tasks, test-first order). The command sequence
-is the official one: /speckit.constitution → /speckit.specify →
-(/speckit.clarify) → /speckit.plan → (/speckit.checklist) →
-/speckit.tasks → /speckit.analyze → /speckit.implement →
-/speckit.converge — with HUMAN APPROVAL after specify, plan and tasks
-(non-negotiable in this project).
