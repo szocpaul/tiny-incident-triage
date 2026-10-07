@@ -1,0 +1,291 @@
+{
+  "timestamp": "2026-10-06T22:24:42Z",
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "n_train": 1845,
+  "n_test": 330,
+  "accuracies": [
+    0.9606060606060606,
+    0.9393939393939394,
+    0.9363636363636364
+  ],
+  "mean_accuracy": 0.9454545454545454,
+  "stdev_accuracy": 0.013208784677395937,
+  "probe_per_seed": [
+    "7/8",
+    "7/8",
+    "7/8"
+  ],
+  "sc002_gate": true,
+  "sc004_probe": true,
+  "total_seconds": 2356.6,
+  "per_category": {
+    "Access Management": {
+      "n": 16,
+      "mean": 1.0,
+      "min": 1.0
+    },
+    "Application": {
+      "n": 48,
+      "mean": 0.951388888888889,
+      "min": 0.8958333333333334
+    },
+    "Backup/Recovery": {
+      "n": 19,
+      "mean": 1.0,
+      "min": 1.0
+    },
+    "Cloud Services": {
+      "n": 14,
+      "mean": 0.7142857142857143,
+      "min": 0.6428571428571429
+    },
+    "Data Center": {
+      "n": 14,
+      "mean": 0.9285714285714286,
+      "min": 0.9285714285714286
+    },
+    "Database": {
+      "n": 29,
+      "mean": 0.9885057471264368,
+      "min": 0.9655172413793104
+    },
+    "Email": {
+      "n": 20,
+      "mean": 1.0,
+      "min": 1.0
+    },
+    "Hardware": {
+      "n": 24,
+      "mean": 1.0,
+      "min": 1.0
+    },
+    "Network": {
+      "n": 42,
+      "mean": 0.9206349206349206,
+      "min": 0.9047619047619048
+    },
+    "Performance": {
+      "n": 24,
+      "mean": 0.8194444444444444,
+      "min": 0.75
+    },
+    "Printer/Peripherals": {
+      "n": 22,
+      "mean": 1.0,
+      "min": 1.0
+    },
+    "Security": {
+      "n": 27,
+      "mean": 0.9135802469135802,
+      "min": 0.8518518518518519
+    },
+    "Telephony": {
+      "n": 11,
+      "mean": 1.0,
+      "min": 1.0
+    },
+    "VPN": {
+      "n": 20,
+      "mean": 0.9833333333333333,
+      "min": 0.95
+    }
+  },
+  "runs": [
+    {
+      "seed": 0,
+      "accuracy": 0.9606060606060606,
+      "train_seconds": 791.7,
+      "per_category": {
+        "Access Management": {
+          "n": 16,
+          "accuracy": 1.0
+        },
+        "Application": {
+          "n": 48,
+          "accuracy": 1.0
+        },
+        "Backup/Recovery": {
+          "n": 19,
+          "accuracy": 1.0
+        },
+        "Cloud Services": {
+          "n": 14,
+          "accuracy": 0.7142857142857143
+        },
+        "Data Center": {
+          "n": 14,
+          "accuracy": 0.9285714285714286
+        },
+        "Database": {
+          "n": 29,
+          "accuracy": 1.0
+        },
+        "Email": {
+          "n": 20,
+          "accuracy": 1.0
+        },
+        "Hardware": {
+          "n": 24,
+          "accuracy": 1.0
+        },
+        "Network": {
+          "n": 42,
+          "accuracy": 0.9523809523809523
+        },
+        "Performance": {
+          "n": 24,
+          "accuracy": 0.9166666666666666
+        },
+        "Printer/Peripherals": {
+          "n": 22,
+          "accuracy": 1.0
+        },
+        "Security": {
+          "n": 27,
+          "accuracy": 0.8518518518518519
+        },
+        "Telephony": {
+          "n": 11,
+          "accuracy": 1.0
+        },
+        "VPN": {
+          "n": 20,
+          "accuracy": 1.0
+        }
+      },
+      "probe": "7/8"
+    },
+    {
+      "seed": 1,
+      "accuracy": 0.9393939393939394,
+      "train_seconds": 767.7,
+      "per_category": {
+        "Access Management": {
+          "n": 16,
+          "accuracy": 1.0
+        },
+        "Application": {
+          "n": 48,
+          "accuracy": 0.9583333333333334
+        },
+        "Backup/Recovery": {
+          "n": 19,
+          "accuracy": 1.0
+        },
+        "Cloud Services": {
+          "n": 14,
+          "accuracy": 0.6428571428571429
+        },
+        "Data Center": {
+          "n": 14,
+          "accuracy": 0.9285714285714286
+        },
+        "Database": {
+          "n": 29,
+          "accuracy": 1.0
+        },
+        "Email": {
+          "n": 20,
+          "accuracy": 1.0
+        },
+        "Hardware": {
+          "n": 24,
+          "accuracy": 1.0
+        },
+        "Network": {
+          "n": 42,
+          "accuracy": 0.9047619047619048
+        },
+        "Performance": {
+          "n": 24,
+          "accuracy": 0.75
+        },
+        "Printer/Peripherals": {
+          "n": 22,
+          "accuracy": 1.0
+        },
+        "Security": {
+          "n": 27,
+          "accuracy": 0.9259259259259259
+        },
+        "Telephony": {
+          "n": 11,
+          "accuracy": 1.0
+        },
+        "VPN": {
+          "n": 20,
+          "accuracy": 1.0
+        }
+      },
+      "probe": "7/8"
+    },
+    {
+      "seed": 2,
+      "accuracy": 0.9363636363636364,
+      "train_seconds": 778.1,
+      "per_category": {
+        "Access Management": {
+          "n": 16,
+          "accuracy": 1.0
+        },
+        "Application": {
+          "n": 48,
+          "accuracy": 0.8958333333333334
+        },
+        "Backup/Recovery": {
+          "n": 19,
+          "accuracy": 1.0
+        },
+        "Cloud Services": {
+          "n": 14,
+          "accuracy": 0.7857142857142857
+        },
+        "Data Center": {
+          "n": 14,
+          "accuracy": 0.9285714285714286
+        },
+        "Database": {
+          "n": 29,
+          "accuracy": 0.9655172413793104
+        },
+        "Email": {
+          "n": 20,
+          "accuracy": 1.0
+        },
+        "Hardware": {
+          "n": 24,
+          "accuracy": 1.0
+        },
+        "Network": {
+          "n": 42,
+          "accuracy": 0.9047619047619048
+        },
+        "Performance": {
+          "n": 24,
+          "accuracy": 0.7916666666666666
+        },
+        "Printer/Peripherals": {
+          "n": 22,
+          "accuracy": 1.0
+        },
+        "Security": {
+          "n": 27,
+          "accuracy": 0.9629629629629629
+        },
+        "Telephony": {
+          "n": 11,
+          "accuracy": 1.0
+        },
+        "VPN": {
+          "n": 20,
+          "accuracy": 0.95
+        }
+      },
+      "probe": "7/8"
+    }
+  ]
+}

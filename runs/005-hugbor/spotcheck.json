@@ -1,0 +1,446 @@
+{
+  "n": 70,
+  "agreement": 0.8857142857142857,
+  "invalid_qwen_answers": 0,
+  "seconds": 70.6,
+  "per_category": {
+    "Access Management": 1.0,
+    "Application": 0.6,
+    "Backup/Recovery": 1.0,
+    "Cloud Services": 0.6,
+    "Data Center": 0.8,
+    "Database": 1.0,
+    "Email": 1.0,
+    "Hardware": 1.0,
+    "Network": 1.0,
+    "Performance": 0.6,
+    "Printer/Peripherals": 1.0,
+    "Security": 1.0,
+    "Telephony": 0.8,
+    "VPN": 1.0
+  },
+  "threshold": 0.9,
+  "gate": "STOP",
+  "rows": [
+    {
+      "id": "hugbor_servicenow-INC5000508",
+      "gold": "Access Management",
+      "qwen": "Access Management",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5000087",
+      "gold": "Access Management",
+      "qwen": "Access Management",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5000797",
+      "gold": "Access Management",
+      "qwen": "Access Management",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5000864",
+      "gold": "Access Management",
+      "qwen": "Access Management",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5000984",
+      "gold": "Access Management",
+      "qwen": "Access Management",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5001762",
+      "gold": "Application",
+      "qwen": "Application",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5000985",
+      "gold": "Application",
+      "qwen": "Cloud Services",
+      "match": false
+    },
+    {
+      "id": "hugbor_servicenow-INC5001582",
+      "gold": "Application",
+      "qwen": "Network",
+      "match": false
+    },
+    {
+      "id": "hugbor_servicenow-INC5001264",
+      "gold": "Application",
+      "qwen": "Application",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5001710",
+      "gold": "Application",
+      "qwen": "Application",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5001284",
+      "gold": "Backup/Recovery",
+      "qwen": "Backup/Recovery",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5000784",
+      "gold": "Backup/Recovery",
+      "qwen": "Backup/Recovery",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5000538",
+      "gold": "Backup/Recovery",
+      "qwen": "Backup/Recovery",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5000961",
+      "gold": "Backup/Recovery",
+      "qwen": "Backup/Recovery",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5000556",
+      "gold": "Backup/Recovery",
+      "qwen": "Backup/Recovery",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5000395",
+      "gold": "Cloud Services",
+      "qwen": "Application",
+      "match": false
+    },
+    {
+      "id": "hugbor_servicenow-INC5000453",
+      "gold": "Cloud Services",
+      "qwen": "Cloud Services",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5000028",
+      "gold": "Cloud Services",
+      "qwen": "Cloud Services",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5001221",
+      "gold": "Cloud Services",
+      "qwen": "Cloud Services",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5000475",
+      "gold": "Cloud Services",
+      "qwen": "Application",
+      "match": false
+    },
+    {
+      "id": "hugbor_servicenow-INC5000207",
+      "gold": "Data Center",
+      "qwen": "Data Center",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5001140",
+      "gold": "Data Center",
+      "qwen": "Data Center",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5000093",
+      "gold": "Data Center",
+      "qwen": "Data Center",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5000464",
+      "gold": "Data Center",
+      "qwen": "Hardware",
+      "match": false
+    },
+    {
+      "id": "hugbor_servicenow-INC5000744",
+      "gold": "Data Center",
+      "qwen": "Data Center",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5001617",
+      "gold": "Database",
+      "qwen": "Database",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5000829",
+      "gold": "Database",
+      "qwen": "Database",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5001597",
+      "gold": "Database",
+      "qwen": "Database",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5001173",
+      "gold": "Database",
+      "qwen": "Database",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5001033",
+      "gold": "Database",
+      "qwen": "Database",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5001693",
+      "gold": "Email",
+      "qwen": "Email",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5000319",
+      "gold": "Email",
+      "qwen": "Email",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5001775",
+      "gold": "Email",
+      "qwen": "Email",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5000627",
+      "gold": "Email",
+      "qwen": "Email",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5000572",
+      "gold": "Email",
+      "qwen": "Email",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5000272",
+      "gold": "Hardware",
+      "qwen": "Hardware",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5000503",
+      "gold": "Hardware",
+      "qwen": "Hardware",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5000540",
+      "gold": "Hardware",
+      "qwen": "Hardware",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5000307",
+      "gold": "Hardware",
+      "qwen": "Hardware",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5000755",
+      "gold": "Hardware",
+      "qwen": "Hardware",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5001761",
+      "gold": "Network",
+      "qwen": "Network",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5000598",
+      "gold": "Network",
+      "qwen": "Network",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5000468",
+      "gold": "Network",
+      "qwen": "Network",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5001090",
+      "gold": "Network",
+      "qwen": "Network",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5001209",
+      "gold": "Network",
+      "qwen": "Network",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5001851",
+      "gold": "Performance",
+      "qwen": "Application",
+      "match": false
+    },
+    {
+      "id": "hugbor_servicenow-INC5000305",
+      "gold": "Performance",
+      "qwen": "Application",
+      "match": false
+    },
+    {
+      "id": "hugbor_servicenow-INC5000055",
+      "gold": "Performance",
+      "qwen": "Performance",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5001385",
+      "gold": "Performance",
+      "qwen": "Performance",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5000557",
+      "gold": "Performance",
+      "qwen": "Performance",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5000623",
+      "gold": "Printer/Peripherals",
+      "qwen": "Printer/Peripherals",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5000335",
+      "gold": "Printer/Peripherals",
+      "qwen": "Printer/Peripherals",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5001133",
+      "gold": "Printer/Peripherals",
+      "qwen": "Printer/Peripherals",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5000802",
+      "gold": "Printer/Peripherals",
+      "qwen": "Printer/Peripherals",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5001219",
+      "gold": "Printer/Peripherals",
+      "qwen": "Printer/Peripherals",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5000059",
+      "gold": "Security",
+      "qwen": "Security",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5000715",
+      "gold": "Security",
+      "qwen": "Security",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5001461",
+      "gold": "Security",
+      "qwen": "Security",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5000294",
+      "gold": "Security",
+      "qwen": "Security",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5000834",
+      "gold": "Security",
+      "qwen": "Security",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5000977",
+      "gold": "Telephony",
+      "qwen": "Telephony",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5000300",
+      "gold": "Telephony",
+      "qwen": "Telephony",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5000030",
+      "gold": "Telephony",
+      "qwen": "Telephony",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5000436",
+      "gold": "Telephony",
+      "qwen": "Telephony",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5000917",
+      "gold": "Telephony",
+      "qwen": "Network",
+      "match": false
+    },
+    {
+      "id": "hugbor_servicenow-INC5001415",
+      "gold": "VPN",
+      "qwen": "VPN",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5001196",
+      "gold": "VPN",
+      "qwen": "VPN",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5000959",
+      "gold": "VPN",
+      "qwen": "VPN",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5001395",
+      "gold": "VPN",
+      "qwen": "VPN",
+      "match": true
+    },
+    {
+      "id": "hugbor_servicenow-INC5000302",
+      "gold": "VPN",
+      "qwen": "VPN",
+      "match": true
+    }
+  ]
+}

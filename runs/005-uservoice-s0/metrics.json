@@ -1,0 +1,65 @@
+{
+  "timestamp": "2026-10-06T21:58:49.488259+00:00",
+  "n_test": 330,
+  "accuracy": 0.9606060606060606,
+  "per_category": {
+    "Access Management": {
+      "n": 16,
+      "accuracy": 1.0
+    },
+    "Application": {
+      "n": 48,
+      "accuracy": 1.0
+    },
+    "Backup/Recovery": {
+      "n": 19,
+      "accuracy": 1.0
+    },
+    "Cloud Services": {
+      "n": 14,
+      "accuracy": 0.7142857142857143
+    },
+    "Data Center": {
+      "n": 14,
+      "accuracy": 0.9285714285714286
+    },
+    "Database": {
+      "n": 29,
+      "accuracy": 1.0
+    },
+    "Email": {
+      "n": 20,
+      "accuracy": 1.0
+    },
+    "Hardware": {
+      "n": 24,
+      "accuracy": 1.0
+    },
+    "Network": {
+      "n": 42,
+      "accuracy": 0.9523809523809523
+    },
+    "Performance": {
+      "n": 24,
+      "accuracy": 0.9166666666666666
+    },
+    "Printer/Peripherals": {
+      "n": 22,
+      "accuracy": 1.0
+    },
+    "Security": {
+      "n": 27,
+      "accuracy": 0.8518518518518519
+    },
+    "Telephony": {
+      "n": 11,
+      "accuracy": 1.0
+    },
+    "VPN": {
+      "n": 20,
+      "accuracy": 1.0
+    }
+  },
+  "train_seconds": 791.7,
+  "gate_exit_code": 0
+}
