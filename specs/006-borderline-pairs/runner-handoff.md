@@ -8,6 +8,10 @@ You work from FILES in this repository, not from conversation context.
 
 - Repo: `/home/ubuntu/tiny-incident-triage` (Linux server, 4 vCPU EPYC Genoa,
   no GPU; training is CPU-only BY DESIGN — do not try to change that).
+- **Bootstrap first**: if `data/tidy/test_hugbor.parquet` or
+  `runs/005-uservoice-s1/model` is missing, run
+  `bash scripts/server_bootstrap.sh` (~1 h incl. retraining; deterministic,
+  bit-identical artifacts). Do not hand-assemble data files.
 - Interpreter: `/home/ubuntu/tiny-incident-triage/.venv/bin/python`
   (Python 3.12, deps installed, `pip install -e .` done, 39/39 tests green).
 - LLM endpoint for any generation: the local Qwen at the URL configured in
